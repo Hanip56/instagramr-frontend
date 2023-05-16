@@ -6,14 +6,24 @@ import {
   AiOutlineInstagram,
   AiOutlineSearch,
   AiOutlineFieldTime,
+  AiFillCompass,
 } from "react-icons/ai";
-import { BiMoviePlay, BiTagAlt } from "react-icons/bi";
-import { IoPaperPlaneOutline, IoPersonCircleOutline } from "react-icons/io5";
+import { BiTagAlt } from "react-icons/bi";
+import {
+  IoPaperPlane,
+  IoPaperPlaneOutline,
+  IoPeopleCircle,
+  IoPeopleCircleOutline,
+  IoPersonCircleOutline,
+} from "react-icons/io5";
+import { MdMovieFilter, MdOutlineMovieFilter } from "react-icons/md";
 import { FiPlusSquare } from "react-icons/fi";
 import { HiBars3 } from "react-icons/hi2";
 import { TbMessageReport, TbMoon, TbSettings } from "react-icons/tb";
 import { useState, createRef } from "react";
 import useOutsideAlerter from "../hooks/useOutsideAlerter";
+
+import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
   const [showBar, setShowBar] = useState(false);
@@ -30,38 +40,81 @@ const Navbar = () => {
         </div>
         <p className="hidden lg:block ml-3">Instagram</p>
       </div>
-      <ul className="flex-grow flex flex-row items-center sm:flex-col gap-y-2">
-        <li className="navList">
-          <span className="text-[25px] p-0 sm:p-2 lg:p-3">
-            {/* <AiOutlineHome /> */}
-            <AiFillHome />
-          </span>
-          <span className="hidden lg:inline-block font-bold">Home</span>
-        </li>
+      <div className="flex-grow flex flex-row items-center sm:flex-col gap-y-2">
+        <NavLink to={`/`} className="navList">
+          {({ isActive }) => (
+            <>
+              <span className="text-[25px] p-0 sm:p-2 lg:p-3">
+                {!isActive && <AiOutlineHome />}
+                {isActive && <AiFillHome />}
+              </span>
+              <span
+                className={`hidden lg:inline-block ${
+                  isActive ? "font-bold" : "font-medium"
+                }`}
+              >
+                Home
+              </span>
+            </>
+          )}
+        </NavLink>
         <li className="navList hidden sm:flex">
           <span className="text-[25px] p-0 sm:p-2 lg:p-3">
             <AiOutlineSearch />
           </span>
           <span className="hidden lg:inline-block">Search</span>
         </li>
-        <li className="navList">
-          <span className="text-[25px] p-0 sm:p-2 lg:p-3">
-            <AiOutlineCompass />
-          </span>
-          <span className="hidden lg:inline-block">Explore</span>
-        </li>
-        <li className="navList">
-          <span className="text-[25px] p-0 sm:p-2 lg:p-3">
-            <BiMoviePlay />
-          </span>
-          <span className="hidden lg:inline-block">Reels</span>
-        </li>
-        <li className="navList">
-          <span className="text-[25px] p-0 sm:p-2 lg:p-3">
-            <IoPaperPlaneOutline />
-          </span>
-          <span className="hidden lg:inline-block">Messages</span>
-        </li>
+        <NavLink to={`/explore`} className="navList">
+          {({ isActive }) => (
+            <>
+              <span className="text-[25px] p-0 sm:p-2 lg:p-3">
+                {!isActive && <AiOutlineCompass />}
+                {isActive && <AiFillCompass />}
+              </span>
+              <span
+                className={`hidden lg:inline-block ${
+                  isActive ? "font-bold" : "font-medium"
+                }`}
+              >
+                Explore
+              </span>
+            </>
+          )}
+        </NavLink>
+        <NavLink to={`/reels`} className="navList">
+          {({ isActive }) => (
+            <>
+              <span className="text-[25px] p-0 sm:p-2 lg:p-3">
+                {!isActive && <MdOutlineMovieFilter />}
+                {isActive && <MdMovieFilter />}
+              </span>
+              <span
+                className={`hidden lg:inline-block ${
+                  isActive ? "font-bold" : "font-medium"
+                }`}
+              >
+                Reels
+              </span>
+            </>
+          )}
+        </NavLink>
+        <NavLink to={`/direct/inbox`} className="navList">
+          {({ isActive }) => (
+            <>
+              <span className="text-[25px] p-0 sm:p-2 lg:p-3">
+                {!isActive && <IoPaperPlaneOutline />}
+                {isActive && <IoPaperPlane />}
+              </span>
+              <span
+                className={`hidden lg:inline-block ${
+                  isActive ? "font-bold" : "font-medium"
+                }`}
+              >
+                Messages
+              </span>
+            </>
+          )}
+        </NavLink>
         <li className="navList hidden sm:flex">
           <span className="text-[25px] p-0 sm:p-2 lg:p-3">
             <AiOutlineHeart />
@@ -74,13 +127,24 @@ const Navbar = () => {
           </span>
           <span className="hidden lg:inline-block">Create</span>
         </li>
-        <li className="navList">
-          <span className="text-[25px] p-0 sm:p-2 lg:p-3">
-            <IoPersonCircleOutline />
-          </span>
-          <span className="hidden lg:inline-block">Profile</span>
-        </li>
-      </ul>
+        <NavLink to={`/halfz`} className="navList">
+          {({ isActive }) => (
+            <>
+              <span className="text-[25px] p-0 sm:p-2 lg:p-3">
+                {!isActive && <IoPeopleCircleOutline />}
+                {isActive && <IoPeopleCircle />}
+              </span>
+              <span
+                className={`hidden lg:inline-block ${
+                  isActive ? "font-bold" : "font-medium"
+                }`}
+              >
+                Profile
+              </span>
+            </>
+          )}
+        </NavLink>
+      </div>
       {/* three bar */}
       <div className="hidden sm:block relative">
         <button
