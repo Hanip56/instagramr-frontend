@@ -42,7 +42,7 @@ const StatusUser = () => {
   console.log({ scrollLeft });
 
   return (
-    <div className="relative flex items-center w-[694px] h-[85px]">
+    <div className="relative flex items-center w-full h-[85px] mb-4">
       {showChevLeft && (
         <button
           aria-label="left button carousel status user"
@@ -54,7 +54,7 @@ const StatusUser = () => {
       )}
       <div
         ref={containerRef as LegacyRef<HTMLDivElement>}
-        className="w-full overflow-x-auto flex items-center gap-6 scrollbar-hide scroll-smooth"
+        className="w-full overflow-x-auto flex items-center gap-4 scrollbar-hide scroll-smooth"
       >
         {Array(18)
           .fill("")

@@ -33,7 +33,7 @@ const Navbar = () => {
   useOutsideAlerter(barRef, setShowBar, moreBtnRef);
 
   return (
-    <div className="fixed bottom-0 md:relative w-full md:w-fit lg:basis-[244px] px-3 py-5 bg-darkBg md:min-h-[100dvh] flex flex-col text-darkText border border-transparent md:border-r-white/20">
+    <div className="fixed z-10 bottom-0 w-full md:w-fit lg:w-[244px] px-3 py-5 bg-darkBg md:min-h-[100dvh] flex flex-col text-darkText border border-transparent md:border-r-white/20">
       <div className="hidden my-6 md:flex justify-center lg:justify-start">
         <div className="hidden md:block lg:hidden text-[25px]">
           <AiOutlineInstagram />

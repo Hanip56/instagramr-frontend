@@ -6,7 +6,7 @@ const MainContainer = () => {
     <div className="flex">
       <Navbar />
       {/* main */}
-      <div className="flex-1 text-white">
+      <div className="ml-0 md:ml-[4.5rem] lg:ml-[244px] flex-1 text-white">
         <Outlet />
       </div>
     </div>
