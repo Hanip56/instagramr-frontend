@@ -61,14 +61,14 @@ const Home = () => {
 
         {/* suggestion */}
         <div className="h-72">
-          <h4 className="font-semibold text-sm text-white/50">
+          <h4 className="font-semibold text-sm text-gray-500 dark:text-white/50">
             Suggested for you
           </h4>
           <div>{/* here suggestion other account */}</div>
         </div>
 
         {/* footer */}
-        <div className=" text-white/40 ">
+        <div className="text-gray-400 dark:text-white/40 ">
           <div className="text-xs font-light leading-6">
             <Link to="#">About</Link> -<Link to="#">Help</Link> -
             <Link to="#">Press</Link> -<Link to="#">API</Link> -

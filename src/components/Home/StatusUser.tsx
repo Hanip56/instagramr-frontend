@@ -46,7 +46,7 @@ const StatusUser = () => {
       {showChevLeft && (
         <button
           aria-label="left button carousel status user"
-          className="absolute left-0 text-2xl"
+          className="absolute left-3 text-2xl top-[1.35rem] text-lightBg"
           onClick={() => handleScroll("left")}
         >
           <IoChevronBackCircle />
@@ -74,7 +74,7 @@ const StatusUser = () => {
       {showChevRight && (
         <button
           aria-label="right button carousel status user"
-          className="absolute right-0 text-2xl"
+          className="absolute right-3 text-2xl top-[1.35rem] text-lightBg"
           onClick={() => handleScroll("right")}
         >
           <IoChevronForwardCircle />

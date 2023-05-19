@@ -62,7 +62,7 @@ const Card = () => {
   useOutsideAlerter(emojiBoxRef, setShowEmojiBox);
 
   return (
-    <div className="w-[100%]  mx-auto rounded-md bg-darkBg">
+    <div className="w-[100%]  mx-auto rounded-md bg-lightBg dark:bg-darkBg">
       <header className="w-full h-14 flex justify-between items-center px-2">
         <div className="flex items-center gap-x-4">
           <div

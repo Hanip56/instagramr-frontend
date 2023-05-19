@@ -5,13 +5,18 @@
 @tailwind utilities;
 
 body {
-  background-color: #000;
   font-family: "Open Sans", sans-serif;
+
+  @apply bg-lightBg dark:bg-darkBg;
 }
 
 @layer components {
   .navList {
-    @apply text-white flex items-center justify-center lg:justify-start cursor-pointer w-full rounded-lg hover:scale-110 sm:hover:scale-100 sm:hover:bg-white/10 transition-all duration-300;
+    @apply text-lightText dark:text-darkText flex items-center justify-center lg:justify-start cursor-pointer w-full rounded-lg hover:scale-110 sm:hover:bg-transparent sm:hover:scale-100 md:hover:bg-darkBg/5 dark:md:hover:bg-lightBg/10 transition-all duration-300;
+  }
+
+  .menuList {
+    @apply text-lightText dark:text-darkText flex items-center justify-start px-1 cursor-pointer w-full rounded-lg hover:bg-darkBg/5 dark:hover:bg-white/5 transition-all duration-300;
   }
 }
 
