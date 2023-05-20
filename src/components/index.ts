@@ -7,3 +7,8 @@ export { default as Card } from "./Home/Card";
 
 // skeletons
 export { default as SkeletonPost } from "./skeletons/SkeletonPost";
+export { default as SkeletonModalPost } from "./skeletons/SkeletonModalPost";
+
+// Modals
+export { default as ModalCardOptions } from "./Modals/ModalCardOptions";
+export { default as ModalPost } from "./Modals/ModalPost";

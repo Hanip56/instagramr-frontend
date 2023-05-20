@@ -16,6 +16,15 @@ export default {
         xs: "470px",
         ...defaultTheme.screens,
       },
+      animation: {
+        fadeIn: "fadeIn .1s ease-in",
+      },
+      keyframes: (theme) => ({
+        fadeIn: {
+          "0%": { scale: "110%", opacity: 0 },
+          "100%": { scale: "100%", opacity: 1 },
+        },
+      }),
     },
   },
   plugins: [require("tailwind-scrollbar-hide")],

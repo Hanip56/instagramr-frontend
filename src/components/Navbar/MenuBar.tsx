@@ -30,14 +30,14 @@ const MenuBar = () => {
   }, [showBar]);
 
   return (
-    <div className="hidden md:block relative">
+    <div className="hidden md:flex relative text-lightText dark:text-darkText">
       <button
         aria-label="show menu bar"
         onClick={() => setShowBar((prev) => !prev)}
-        className="menuList cursor-pointer"
+        className="navList"
         ref={moreBtnRef}
       >
-        <span className="text-3xl p-0 md:p-2 lg:p-3">
+        <span className="text-[25px] p-0 md:p-2 lg:p-3">
           <HiBars3 />
         </span>
         <span className="hidden lg:inline-block">More</span>
@@ -98,19 +98,19 @@ const MenuBar = () => {
             </>
           ) : (
             <>
-              <a href="#" className="menuList justify-start px-1">
+              <a href="#" className="menuList">
                 <span className="text-2xl p-3">
                   <TbSettings />
                 </span>
                 <span>Settings</span>
               </a>
-              <a href="#" className="menuList justify-start px-1">
+              <a href="#" className="menuList">
                 <span className="text-2xl p-3">
                   <AiOutlineFieldTime />
                 </span>
                 <span>Your activity</span>
               </a>
-              <a href="#" className="menuList justify-start px-1">
+              <a href="#" className="menuList">
                 <span className="text-2xl p-3">
                   <BiTagAlt />
                 </span>
@@ -118,7 +118,7 @@ const MenuBar = () => {
               </a>
               <button
                 aria-label="show switch appearance toggle"
-                className="menuList justify-start px-1"
+                className="menuList"
                 onClick={() => setSwitchAppearance(true)}
               >
                 <span className="text-2xl p-3">
@@ -126,18 +126,18 @@ const MenuBar = () => {
                 </span>
                 <span>Switch appearance</span>
               </button>
-              <a href="#" className="menuList justify-start px-1">
+              <a href="#" className="menuList">
                 <span className="text-2xl p-3">
                   <TbMessageReport />
                 </span>
                 <span>Report a problem</span>
               </a>
               <div className="w-[calc(100%+16px)] my-2 h-2 bg-slate-500/20 -m-2" />
-              <div className="menuList justify-start px-1">
+              <div className="menuList">
                 <span className="p-4">Switch accounts</span>
               </div>
               <div className="w-[calc(100%+16px)] my-2 h-1 bg-slate-500/20 -m-2" />
-              <div className="menuList justify-start px-1">
+              <div className="menuList">
                 <span className="p-4">Log out</span>
               </div>
             </>

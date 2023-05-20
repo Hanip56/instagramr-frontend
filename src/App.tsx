@@ -1,7 +1,11 @@
 import MainContainer from "./components/MainContainer";
 
 const App = () => {
-  return <MainContainer />;
+  return (
+    <>
+      <MainContainer />
+    </>
+  );
 };
 
 export default App;

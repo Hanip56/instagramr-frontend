@@ -16,13 +16,17 @@ import Picker from "@emoji-mart/react";
 import useOutsideAlerter from "../../utils/ClickOutside";
 // import { BASE_URL } from "../../constants";
 import { postData as post } from "../../dummyData";
+import { useDispatch } from "react-redux";
+import {
+  showModalCardOptions,
+  showModalPost,
+} from "../../app/features/modal/modalSlice";
 
 const Card = () => {
   const [comment, setComment] = useState("");
   const [showEmojiBox, setShowEmojiBox] = useState(false);
   const emojiBoxRef = useRef(null);
-  // const [saveOrUnsave] = useSaveOrUnsaveMutation();
-  // const [addComment] = useAddCommentMutation();
+  const dispatch = useDispatch();
 
   const liked = false;
   const saved = false;
@@ -41,11 +45,11 @@ const Card = () => {
   };
 
   const handleShowModal = () => {
-    console.log("handleShowModal");
+    dispatch(showModalPost({}));
   };
 
   const handleShowModalCardOptions = () => {
-    console.log("handleShowModalCardOptions");
+    dispatch(showModalCardOptions({}));
   };
 
   const postDate = new Date(post?.createdAt);

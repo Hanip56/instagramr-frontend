@@ -7,6 +7,7 @@ export const postData = {
   postedBy: {
     _id: "12",
     username: "halfz",
+    profilePicture: postImage,
   },
   likes: ["1"],
   savedBy: ["3"],
