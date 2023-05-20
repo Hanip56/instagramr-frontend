@@ -86,7 +86,7 @@ const Card = () => {
           </div>
         </div>
         <div
-          className="flex justify-center items-center mr-2 cursor-pointer"
+          className="flex justify-center items-center mr-2 cursor-pointer hover:opacity-50"
           onClick={handleShowModalCardOptions}
         >
           <BsThreeDots />

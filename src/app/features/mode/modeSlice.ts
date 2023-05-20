@@ -1,10 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  mode: window.matchMedia("(prefers-colors-scheme:dark)").matches
-    ? "dark"
-    : "light",
+  mode:
+    localStorage.getItem("@instagramr_mode") ||
+    (window.matchMedia("(prefers-colors-scheme:dark)").matches
+      ? "dark"
+      : "light"),
 };
+
+console.log({ initialState });
 
 if (initialState.mode === "dark") {
   document.documentElement.classList.add("dark");
@@ -22,9 +26,11 @@ const modeSlice = createSlice({
       if (state.mode === "dark") {
         state.mode = "light";
         document.documentElement.classList.remove("dark");
+        localStorage.setItem("@instagramr_mode", "light");
       } else {
         state.mode = "dark";
         document.documentElement.classList.add("dark");
+        localStorage.setItem("@instagramr_mode", "dark");
       }
     },
   },

@@ -9,7 +9,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../app/store";
 import { toggleMode } from "../../app/features/mode/modeSlice";
 
-const MenuBar = () => {
+type PropTypes = {
+  alternateBar: boolean;
+};
+
+const MenuBar = ({ alternateBar }: PropTypes) => {
   const [showBar, setShowBar] = useState(false);
   const [switchApperance, setSwitchAppearance] = useState(false);
   const barRef = createRef<HTMLDivElement>();
@@ -40,7 +44,9 @@ const MenuBar = () => {
         <span className="text-[25px] p-0 md:p-2 lg:p-3">
           <HiBars3 />
         </span>
-        <span className="hidden lg:inline-block">More</span>
+        <span className={`hidden ${alternateBar ? "" : "lg:inline-block"}`}>
+          More
+        </span>
       </button>
       {/* bar menu */}
       {showBar && (
