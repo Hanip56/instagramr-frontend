@@ -1,3 +1,5 @@
+export { default as Footer } from "./Footer";
+
 // Navbar
 export { default as MenuBar } from "./Navbar/MenuBar";
 export { default as SearchNavbar } from "./Navbar/SearchNavbar";
