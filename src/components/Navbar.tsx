@@ -16,13 +16,14 @@ import {
 } from "react-icons/io5";
 import { MdMovieFilter, MdOutlineMovieFilter } from "react-icons/md";
 import { FiPlusSquare } from "react-icons/fi";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { MenuBar, SearchNavbar } from ".";
 
 const Navbar = () => {
   const [searchBar, setSearchBar] = useState(false);
+  const location = useLocation();
 
-  const alternateBar = searchBar;
+  const alternateBar = searchBar || location.pathname === "/direct/inbox";
 
   const handleCloseAlternateBar = () => {
     setSearchBar(false);
@@ -78,7 +79,7 @@ const Navbar = () => {
           </NavLink>
           <li
             className={`navList hidden md:flex border ${
-              alternateBar ? "" : "border-transparent"
+              searchBar ? "" : "border-transparent"
             }`}
             onClick={() => setSearchBar((prev) => !prev)}
           >
@@ -143,10 +144,8 @@ const Navbar = () => {
             {({ isActive }) => (
               <>
                 <span className="text-[25px] p-0 md:p-2 lg:p-3">
-                  {(!isActive || (isActive && alternateBar)) && (
-                    <IoPaperPlaneOutline />
-                  )}
-                  {isActive && !alternateBar && <IoPaperPlane />}
+                  {!isActive && <IoPaperPlaneOutline />}
+                  {isActive && <IoPaperPlane />}
                 </span>
                 <span
                   className={`hidden ${

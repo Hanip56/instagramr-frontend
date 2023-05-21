@@ -18,6 +18,10 @@ body {
   .menuList {
     @apply text-lightText dark:text-darkText flex items-center justify-start px-1 cursor-pointer w-full rounded-lg hover:bg-darkBg/5 dark:hover:bg-white/5 transition-all duration-300;
   }
+
+  .igButton {
+    @apply text-sm font-semibold rounded-lg py-2 px-4 dark:bg-lightBg bg-grayIg/5 text-lightText hover:bg-gray-200 dark:hover:bg-lightBg/90;
+  }
 }
 
 @layer utilities {
