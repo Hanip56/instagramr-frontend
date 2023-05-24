@@ -20,7 +20,7 @@ const MainContainer = () => {
         <Navbar />
         {/* main */}
         <div
-          className={`ml-0 md:ml-[4.5rem] flex-1 ${
+          className={`ml-0 pb-16 md:pb-0 md:ml-[4.5rem] flex-1 min-h-[calc(100vh-45px)] md:min-h-screen ${
             location.pathname === "/direct/inbox" ? "" : "lg:ml-[244px]"
           }`}
         >

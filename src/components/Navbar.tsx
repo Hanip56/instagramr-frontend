@@ -7,6 +7,7 @@ import {
   AiOutlineInstagram,
   AiOutlineSearch,
   AiFillCompass,
+  AiFillHeart,
 } from "react-icons/ai";
 import {
   IoPaperPlane,
@@ -17,25 +18,30 @@ import {
 import { MdMovieFilter, MdOutlineMovieFilter } from "react-icons/md";
 import { FiPlusSquare } from "react-icons/fi";
 import { NavLink, useLocation } from "react-router-dom";
-import { MenuBar, SearchNavbar } from ".";
+import { MenuBar, NotifNavbar, SearchNavbar } from ".";
 
 const Navbar = () => {
   const [searchBar, setSearchBar] = useState(false);
+  const [notifBar, setNotifBar] = useState(false);
   const location = useLocation();
 
-  const alternateBar = searchBar || location.pathname === "/direct/inbox";
+  const alternateBar =
+    searchBar || notifBar || location.pathname === "/direct/inbox";
 
   const handleCloseAlternateBar = () => {
     setSearchBar(false);
+    setNotifBar(false);
   };
 
   return (
     <>
       {searchBar && <SearchNavbar />}
+      {notifBar && <NotifNavbar />}
+
       <div
         className={`${
           alternateBar ? "" : "lg:w-[244px]"
-        } fixed z-10 bottom-0 w-full md:w-fit px-3 py-5 bg-lightBg dark:bg-darkBg md:min-h-[100dvh] flex flex-col text-darkText border border-transparent md:border-r-darkBg/10 dark:md:border-r-white/20`}
+        } fixed z-50 bottom-0 w-full md:w-fit px-3 py-5 bg-lightBg dark:bg-darkBg md:min-h-[100dvh] flex flex-col text-darkText border border-transparent md:border-r-darkBg/10 dark:md:border-r-white/20`}
       >
         <div
           className={`text-lightText dark:text-darkText hidden my-6 md:flex justify-center ${
@@ -81,7 +87,10 @@ const Navbar = () => {
             className={`navList hidden md:flex border ${
               searchBar ? "" : "border-transparent"
             }`}
-            onClick={() => setSearchBar((prev) => !prev)}
+            onClick={() => {
+              setSearchBar((prev) => !prev);
+              setNotifBar(false);
+            }}
           >
             <span className="text-[25px] p-0 md:p-2 lg:p-3">
               <AiOutlineSearch />
@@ -144,8 +153,10 @@ const Navbar = () => {
             {({ isActive }) => (
               <>
                 <span className="text-[25px] p-0 md:p-2 lg:p-3">
-                  {!isActive && <IoPaperPlaneOutline />}
-                  {isActive && <IoPaperPlane />}
+                  {(!isActive || (isActive && alternateBar)) && (
+                    <IoPaperPlaneOutline />
+                  )}
+                  {isActive && !alternateBar && <IoPaperPlane />}
                 </span>
                 <span
                   className={`hidden ${
@@ -157,9 +168,18 @@ const Navbar = () => {
               </>
             )}
           </NavLink>
-          <li className="navList hidden md:flex">
+          <li
+            className={`navList hidden md:flex border ${
+              notifBar ? "" : "border-transparent"
+            }`}
+            onClick={() => {
+              setNotifBar((prev) => !prev);
+              setSearchBar(false);
+            }}
+          >
             <span className="text-[25px] p-0 md:p-2 lg:p-3">
-              <AiOutlineHeart />
+              {!notifBar && <AiOutlineHeart />}
+              {notifBar && <AiFillHeart />}
             </span>
             <span className={`hidden ${alternateBar ? "" : "lg:inline-block"}`}>
               Notifications

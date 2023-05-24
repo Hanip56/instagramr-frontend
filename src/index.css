@@ -20,7 +20,7 @@ body {
   }
 
   .igButton {
-    @apply text-sm font-semibold rounded-lg py-2 px-4 dark:bg-lightBg bg-grayIg/5 text-lightText hover:bg-gray-200 dark:hover:bg-lightBg/90;
+    @apply text-xs md:text-sm font-semibold rounded-lg py-2 px-4 dark:bg-lightBg bg-grayIg/5 text-lightText hover:bg-gray-200 dark:hover:bg-lightBg/90;
   }
 }
 

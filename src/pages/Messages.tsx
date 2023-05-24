@@ -14,7 +14,7 @@ import { VscSmiley } from "react-icons/vsc";
 
 const Messages = () => {
   return (
-    <div className="flex h-screen">
+    <div className="flex h-[calc(100vh-80px)] sm:h-[calc(100vh-66px)] md:h-screen">
       {/* left side */}
       <div className="w-[fit] md:w-[397px] flex flex-col h-full border border-transparent border-r-grayIg/10 dark:border-r-lightBg/20">
         <div className="flex items-center justify-center md:justify-between p-6 py-8 text-xl ">

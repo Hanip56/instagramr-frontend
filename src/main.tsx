@@ -6,6 +6,11 @@ import { Explore, Home, Messages, Profile, Reels } from "./pages";
 import MainContainer from "./components/MainContainer.tsx";
 import { Provider } from "react-redux";
 import { store } from "./app/store.ts";
+import {
+  PostsSection,
+  SavedSection,
+  TaggedSection,
+} from "./components/index.ts";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +36,20 @@ const router = createBrowserRouter([
       {
         path: ":username",
         element: <Profile />,
+        children: [
+          {
+            path: "",
+            element: <PostsSection />,
+          },
+          {
+            path: "saved",
+            element: <SavedSection />,
+          },
+          {
+            path: "tagged",
+            element: <TaggedSection />,
+          },
+        ],
       },
     ],
   },
