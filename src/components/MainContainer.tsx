@@ -1,11 +1,11 @@
 import { useSelector } from "react-redux";
-import { ModalCardOptions, ModalPost, SkeletonModalPost } from ".";
+import { ModalCardOptions, ModalCreate, ModalPost, SkeletonModalPost } from ".";
 import Navbar from "./Navbar";
 import { Outlet, useLocation } from "react-router-dom";
 import { RootState } from "../app/store";
 
 const MainContainer = () => {
-  const { modalCardOptions, modalPost } = useSelector(
+  const { modalCardOptions, modalPost, modalCreate } = useSelector(
     (state: RootState) => state.modal
   );
 
@@ -15,6 +15,7 @@ const MainContainer = () => {
     <>
       {modalCardOptions && <ModalCardOptions />}
       {modalPost && <ModalPost />}
+      {modalCreate && <ModalCreate />}
 
       <div className="flex text-lightText dark:text-darkText">
         <Navbar />

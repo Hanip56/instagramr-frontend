@@ -22,3 +22,4 @@ export { default as SkeletonModalPost } from "./skeletons/SkeletonModalPost";
 // Modals
 export { default as ModalCardOptions } from "./Modals/ModalCardOptions";
 export { default as ModalPost } from "./Modals/ModalPost";
+export { default as ModalCreate } from "./Modals/ModalCreate";

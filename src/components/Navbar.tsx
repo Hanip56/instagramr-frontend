@@ -19,11 +19,14 @@ import { MdMovieFilter, MdOutlineMovieFilter } from "react-icons/md";
 import { FiPlusSquare } from "react-icons/fi";
 import { NavLink, useLocation } from "react-router-dom";
 import { MenuBar, NotifNavbar, SearchNavbar } from ".";
+import { useDispatch } from "react-redux";
+import { showModalCreate } from "../app/features/modal/modalSlice";
 
 const Navbar = () => {
   const [searchBar, setSearchBar] = useState(false);
   const [notifBar, setNotifBar] = useState(false);
   const location = useLocation();
+  const dispatch = useDispatch();
 
   const alternateBar =
     searchBar || notifBar || location.pathname === "/direct/inbox";
@@ -33,6 +36,9 @@ const Navbar = () => {
     setNotifBar(false);
   };
 
+  const handleCreateButton = () => {
+    dispatch(showModalCreate());
+  };
   return (
     <>
       {searchBar && <SearchNavbar />}
@@ -41,7 +47,7 @@ const Navbar = () => {
       <div
         className={`${
           alternateBar ? "" : "lg:w-[244px]"
-        } fixed z-50 bottom-0 w-full md:w-fit px-3 py-5 bg-lightBg dark:bg-darkBg md:min-h-[100dvh] flex flex-col text-darkText border border-transparent md:border-r-darkBg/10 dark:md:border-r-white/20`}
+        } fixed z-40 bottom-0 w-full md:w-fit px-3 py-5 bg-lightBg dark:bg-darkBg md:min-h-[100dvh] flex flex-col text-darkText border border-transparent md:border-r-darkBg/10 dark:md:border-r-white/20`}
       >
         <div
           className={`text-lightText dark:text-darkText hidden my-6 md:flex justify-center ${
@@ -153,10 +159,10 @@ const Navbar = () => {
             {({ isActive }) => (
               <>
                 <span className="text-[25px] p-0 md:p-2 lg:p-3">
-                  {(!isActive || (isActive && alternateBar)) && (
+                  {(!isActive || (isActive && (searchBar || notifBar))) && (
                     <IoPaperPlaneOutline />
                   )}
-                  {isActive && !alternateBar && <IoPaperPlane />}
+                  {isActive && !(searchBar || notifBar) && <IoPaperPlane />}
                 </span>
                 <span
                   className={`hidden ${
@@ -185,7 +191,7 @@ const Navbar = () => {
               Notifications
             </span>
           </li>
-          <li className="navList">
+          <li className="navList" onClick={handleCreateButton}>
             <span className="text-[25px] p-0 md:p-2 lg:p-3">
               <FiPlusSquare />
             </span>

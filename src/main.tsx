@@ -11,11 +11,22 @@ import {
   SavedSection,
   TaggedSection,
 } from "./components/index.ts";
+import SignIn from "./pages/SignIn.tsx";
+import SignUp from "./pages/SignUp.tsx";
+import App from "./App.tsx";
 
 const router = createBrowserRouter([
   {
+    path: "/login",
+    element: <SignIn />,
+  },
+  {
+    path: "/signup",
+    element: <SignUp />,
+  },
+  {
     path: "/",
-    element: <MainContainer />,
+    element: <App />,
     children: [
       {
         path: "",

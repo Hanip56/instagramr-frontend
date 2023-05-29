@@ -20,7 +20,7 @@ const ModalCardOptions = () => {
       ></div>
 
       <div className="fixed left-[50%] top-[50%] -translate-y-[50%] -translate-x-[50%] z-50 flex justify-center items-center rounded-lg">
-        <div className="w-[80vw] xs:w-[25rem] bg-white rounded-lg overflow-hidden flex flex-col divide-y-[1px] text-sm animate-fadeIn">
+        <div className="w-[80vw] xs:w-[25rem] bg-white dark:bg-grayIg rounded-lg overflow-hidden flex flex-col divide-y-[1px] text-sm animate-fadeIn text-lightText dark:text-darkText">
           {/* <button className="w-full py-3 active:bg-gray-300/30 ">Open</button> */}
           <button
             className="w-full py-3 active:bg-gray-300/30 text-red-500 font-semibold"
