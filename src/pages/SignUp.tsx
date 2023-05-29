@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useRegisterMutation } from "../app/features/auth/authApiSlice";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../app/features/auth/authSlice";
 
 type FormValues = {
   fullname: string;
@@ -11,10 +14,9 @@ type FormValues = {
 
 const SignUp = () => {
   const [errorMessage, setErrorMessage] = useState("");
-
-  const isLoading = false;
-  const isError = false;
-  const error = "";
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [registerAuth, { isLoading, isError, error }] = useRegisterMutation();
 
   const {
     register,
@@ -36,12 +38,12 @@ const SignUp = () => {
   }, [watch("email"), watch("fullname"), watch("username"), watch("password")]);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    // const registerResult = await sendRegister(data);
-    // console.log({ registerResult });
-    // if ("data" in registerResult) {
-    //   dispatch(setCredentials({ ...registerResult.data }));
-    //   navigate("/");
-    // }
+    const registerResult = await registerAuth(data);
+    console.log({ registerResult });
+    if ("data" in registerResult) {
+      dispatch(setCredentials({ ...registerResult.data }));
+      navigate("/");
+    }
   };
 
   return (
@@ -93,8 +95,10 @@ const SignUp = () => {
           {errors.password?.type === "minLength" && (
             <p className="error">password minimum is 6.</p>
           )}
-          <button className="w-full text-white font-semibold bg-blue-500 rounded-md p-1 mt-3 overflow-hidden">
-            {/* {isLoading && <LdsSpinner />} */}
+          <button className="w-full text-white font-semibold bg-blue-500 rounded-md p-1 mt-3 overflow-hidden flex justify-center items-center">
+            {isLoading && (
+              <div className="w-4 h-4 m-1 border-2 border-r-transparent rounded-full animate-spin" />
+            )}
             {!isLoading && "Sign Up"}
           </button>
 

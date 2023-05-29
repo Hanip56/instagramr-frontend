@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useLoginMutation } from "../app/features/auth/authApiSlice";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../app/features/auth/authSlice";
 
 type FormValues = {
   email: string;
@@ -9,9 +12,9 @@ type FormValues = {
 
 const SignIn = () => {
   const [errorMessage, setErrorMessage] = useState("");
-
-  const isLoading = false;
-  const isError = false;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [login, { isError, isLoading, error }] = useLoginMutation();
 
   const {
     register,
@@ -20,25 +23,25 @@ const SignIn = () => {
     formState: { errors },
   } = useForm<FormValues>({ defaultValues: { email: "", password: "" } });
 
-  // useEffect(() => {
-  //   if (isError) {
-  //     setErrorMessage((error as any).data.message);
-  //   }
-  // }, [isError]);
+  useEffect(() => {
+    if (isError) {
+      setErrorMessage((error as any).data.message);
+    }
+  }, [isError]);
 
-  // useEffect(() => {
-  //   if (errorMessage) {
-  //     setErrorMessage("");
-  //   }
-  // }, [watch("email"), watch("password")]);
+  useEffect(() => {
+    if (errorMessage) {
+      setErrorMessage("");
+    }
+  }, [watch("email"), watch("password")]);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    // const loginResult = await login(data);
-    // console.log({ loginResult });
-    // if ("data" in loginResult && loginResult.data) {
-    //   dispatch(setCredentials({ ...loginResult.data }));
-    //   navigate("/");
-    // }
+    const loginResult = await login(data);
+    console.log({ loginResult });
+    if ("data" in loginResult && loginResult.data) {
+      dispatch(setCredentials({ ...loginResult.data }));
+      navigate("/");
+    }
   };
 
   return (
@@ -70,8 +73,10 @@ const SignIn = () => {
           {errors.password?.type === "minLength" && (
             <p className="error">password minimum is 6.</p>
           )}
-          <button className="w-full text-white font-semibold bg-blue-500 rounded-md p-1 mt-3 outline-none overflow-hidden">
-            {/* {isLoading && <LdsSpinner />} */}
+          <button className="w-full text-white font-semibold bg-blue-500 rounded-md p-1 mt-3 outline-none overflow-hidden flex justify-center items-center">
+            {isLoading && (
+              <div className="w-4 h-4 m-1 border-2 border-r-transparent rounded-full animate-spin" />
+            )}
             {!isLoading && "Log In"}
           </button>
 

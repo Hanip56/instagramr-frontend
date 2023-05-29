@@ -8,6 +8,9 @@ import { AiOutlineFieldTime } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../app/store";
 import { toggleMode } from "../../app/features/mode/modeSlice";
+import { useLogoutMutation } from "../../app/features/auth/authApiSlice";
+import apiSlice from "../../app/api/api";
+import { useNavigate } from "react-router-dom";
 
 type PropTypes = {
   alternateBar: boolean;
@@ -20,11 +23,30 @@ const MenuBar = ({ alternateBar }: PropTypes) => {
   const moreBtnRef = createRef<HTMLButtonElement>();
   const { mode } = useSelector((state: RootState) => state.mode);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [logout] = useLogoutMutation();
 
   useOutsideAlerter(barRef, setShowBar, moreBtnRef);
 
   const handleToggleMode = () => {
     dispatch(toggleMode());
+  };
+
+  const handleLogout = async () => {
+    await logout();
+
+    // reset cached data
+    dispatch(apiSlice.util.resetApiState());
+    // dispatch(
+    //   apiSlice.util.invalidateTags([
+    //     "ExplorePost",
+    //     "Post",
+    //     "PostsFollowing",
+    //     "SingleUser",
+    //   ])
+    // );
+    navigate("/login");
   };
 
   useEffect(() => {
@@ -143,9 +165,13 @@ const MenuBar = ({ alternateBar }: PropTypes) => {
                 <span className="p-4">Switch accounts</span>
               </div>
               <div className="w-[calc(100%+16px)] my-2 h-1 bg-slate-500/20 -m-2" />
-              <div className="menuList">
+              <button
+                aria-label="log out button"
+                onClick={handleLogout}
+                className="menuList"
+              >
                 <span className="p-4">Log out</span>
-              </div>
+              </button>
             </>
           )}
         </div>

@@ -1,5 +1,6 @@
 export { default as Footer } from "./Footer";
 export { default as PostMiniCard } from "./PostMiniCard";
+export { default as StarterContainer } from "./StarterContainer";
 
 // Navbar
 export { default as MenuBar } from "./Navbar/MenuBar";

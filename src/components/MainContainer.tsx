@@ -1,15 +1,21 @@
 import { useSelector } from "react-redux";
 import { ModalCardOptions, ModalCreate, ModalPost, SkeletonModalPost } from ".";
 import Navbar from "./Navbar";
-import { Outlet, useLocation } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { RootState } from "../app/store";
 
 const MainContainer = () => {
   const { modalCardOptions, modalPost, modalCreate } = useSelector(
     (state: RootState) => state.modal
   );
+  const { token } = useSelector((state: RootState) => state.auth);
 
   const location = useLocation();
+
+  if (!token) {
+    console.log({ token });
+    return <Navigate to="/login" replace={true} />;
+  }
 
   return (
     <>
