@@ -1,23 +1,33 @@
-import { BsPlus } from "react-icons/bs";
+import { BsBookmark, BsPlus } from "react-icons/bs";
 import postImage from "../../dummyData/postImage.jpg";
+import EmptySection from "./EmptySection";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../app/features/auth/authSlice";
 
 const SavedSection = () => {
-  return (
-    <main className="w-full">
-      <div className="w-full flex items-center justify-between">
-        <p>Only you can see what you saved</p>
-        <button className="flex gap-1 items-center text-blue-500 font-semibold hover:text-lightText dark:hover:text-white">
-          <span>
-            <BsPlus />
-          </span>
-          <span>New collection</span>
-        </button>
-      </div>
+  const user = useSelector(selectCurrentUser);
+
+  const saved = user?.saved;
+
+  const content = () => {
+    if (saved.length < 1)
+      return (
+        <EmptySection
+          logo={<BsBookmark />}
+          title="Save"
+          desc="Save photos and videos that you want to see again. No one is notified, and only you can see what you've saved."
+        />
+      );
+
+    return (
       <div className="w-full flex flex-wrap items-center justify-center gap-4 py-4 px-0">
         {Array(6)
           .fill("")
           .map((key, idx) => (
-            <div className="relative bg-gray-300 w-[calc((100%-32px)/3)] h-0 pb-[calc((100%-32px)/3)] group cursor-pointer rounded-lg overflow-hidden">
+            <div
+              key={idx}
+              className="relative bg-gray-300 w-[calc((100%-32px)/3)] h-0 pb-[calc((100%-32px)/3)] group cursor-pointer rounded-lg overflow-hidden"
+            >
               {/* title */}
               <div className="z-20 absolute bottom-3 left-5 text-xl text-darkText">
                 <span>Title Collection</span>
@@ -32,6 +42,21 @@ const SavedSection = () => {
             </div>
           ))}
       </div>
+    );
+  };
+
+  return (
+    <main className="w-full">
+      <div className="w-full flex items-center justify-between text-sm">
+        <p>Only you can see what you saved</p>
+        <button className="flex gap-1 items-center text-blue-500 font-semibold hover:text-lightText dark:hover:text-white">
+          <span>
+            <BsPlus />
+          </span>
+          <span>New collection</span>
+        </button>
+      </div>
+      {content()}
     </main>
   );
 };

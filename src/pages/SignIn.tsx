@@ -53,7 +53,7 @@ const SignIn = () => {
         >
           <h1 className={`text-3xl mb-6`}>Instagramr</h1>
           <input
-            placeholder="username or email"
+            placeholder="Email"
             className={`input ${errors.email ? "inputError" : ""}`}
             type="email"
             {...register("email", {

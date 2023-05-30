@@ -1,28 +1,44 @@
 import { BiUserPlus } from "react-icons/bi";
-import { BsBookmark, BsThreeDots } from "react-icons/bs";
+import { BsBookmark, BsGearWide, BsThreeDots } from "react-icons/bs";
 import { MdOutlineGridOn, MdOutlinePersonPin } from "react-icons/md";
+import { useSelector } from "react-redux";
 import { Link, Outlet, useLocation } from "react-router-dom";
+import { selectCurrentUser } from "../app/features/auth/authSlice";
+import { UserType } from "../../types";
+import { BASE_URL } from "../constants";
 
 const Profile = () => {
   const location = useLocation();
+  const user = useSelector(selectCurrentUser) as UserType;
 
+  const currentUsername = location.pathname.split("/")[1];
   const section = location.pathname.split("/")[2];
 
-  console.log({ section });
+  const isOwnUser = user.username === currentUsername;
 
-  const profileButtonsContainer = (
-    <div className="flex items-center gap-2">
-      <button className="igButton">
-        <span>Following</span>
-      </button>
-      <button className="igButton">
-        <span>Message</span>
-      </button>
-      <button className="igButton text-xl">
-        <BiUserPlus />
-      </button>
-    </div>
-  );
+  const profileButtonsContainer = () => {
+    if (isOwnUser) {
+      return (
+        <button className="igButton">
+          <span>Edit Profile</span>
+        </button>
+      );
+    } else {
+      return (
+        <div className="flex items-center gap-2">
+          <button className="igButton">
+            <span>Following</span>
+          </button>
+          <button className="igButton">
+            <span>Message</span>
+          </button>
+          <button className="igButton text-xl">
+            <BiUserPlus />
+          </button>
+        </div>
+      );
+    }
+  };
 
   return (
     <div className="max-w-[1013px] px-0 md:px-4 mx-auto flex flex-col pt-6">
@@ -30,55 +46,72 @@ const Profile = () => {
         <div className="w-full flex gap-6 items-center gap-y-10">
           <div className="md:basis-[35%] flex justify-center items-center">
             <div className="w-24 h-24 md:w-36 md:h-36 flex-shrink-0 border-2 border-white rounded-full flex justify-center items-center">
-              <div className="w-[91%] h-[91%] rounded-full bg-gray-300"></div>
+              <div className="w-[91%] h-[91%] rounded-full bg-gray-300 overflow-hidden">
+                <img
+                  className="w-full h-full object-cover"
+                  src={`${BASE_URL}/${user?.profilePicture}`}
+                  alt={user?.username}
+                />
+              </div>
             </div>
           </div>
 
           <div className="md:block flex-1 space-y-4 md:space-y-7">
             <div className="flex items-center gap-6">
-              <span>one</span>
-              <div className="hidden md:block">{profileButtonsContainer}</div>
-              <button className="text-2xl">
-                <BsThreeDots />
-              </button>
+              {/* username */}
+              <span>{user?.username}</span>
+              <div className="hidden md:block">{profileButtonsContainer()}</div>
+              {!isOwnUser && (
+                <button className="text-2xl">
+                  <BsThreeDots />
+                </button>
+              )}
+              {isOwnUser && (
+                <button className="text-2xl">
+                  <BsGearWide />
+                </button>
+              )}
             </div>
             {/* status */}
             <ul className="hidden md:flex gap-12 text-base">
               <li>
-                <span className="font-bold">9,276</span> <span>posts</span>
+                <span className="font-bold">{user?.totalPost}</span>{" "}
+                <span>posts</span>
               </li>
               <li>
-                <span className="font-bold">595K</span> <span>followers</span>
+                <span className="font-bold">{user?.totalFollowers}</span>{" "}
+                <span>followers</span>
               </li>
               <li>
-                <span className="font-bold">359</span> <span>following</span>
+                <span className="font-bold">{user?.totalFollowings}</span>{" "}
+                <span>following</span>
               </li>
             </ul>
             {/* buttons container for mobile screen */}
-            <div className="block md:hidden">{profileButtonsContainer}</div>
+            <div className="block md:hidden">{profileButtonsContainer()}</div>
             {/* bio */}
             <div className="hidden md:block">
-              <p>Bio heree !!!</p>
+              <p>{user?.profileBio}</p>
             </div>
           </div>
         </div>
         <div className="block md:hidden">
-          <p>Bio for small screen heree !!!</p>
+          <p>{user?.profileBio}</p>
         </div>
       </header>
 
       {/* status info for small screen */}
       <ul className="flex py-4 text-sm md:hidden gap-12 border border-transparent border-t-grayIg/10 dark:border dark:border-t-lightBg/20 text-center">
         <li className="flex-1">
-          <span className="font-bold">9,276</span> <br />
+          <span className="font-bold">{user.totalPost}</span> <br />
           <span>posts</span>
         </li>
         <li className="flex-1">
-          <span className="font-bold">595K</span> <br />
+          <span className="font-bold">{user.totalFollowers}</span> <br />
           <span>followers</span>
         </li>
         <li className="flex-1">
-          <span className="font-bold">359</span>
+          <span className="font-bold">{user.totalFollowings}</span>
           <br /> <span>following</span>
         </li>
       </ul>

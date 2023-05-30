@@ -19,14 +19,16 @@ import { MdMovieFilter, MdOutlineMovieFilter } from "react-icons/md";
 import { FiPlusSquare } from "react-icons/fi";
 import { NavLink, useLocation } from "react-router-dom";
 import { MenuBar, NotifNavbar, SearchNavbar } from ".";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { showModalCreate } from "../app/features/modal/modalSlice";
+import { selectCurrentUser } from "../app/features/auth/authSlice";
 
 const Navbar = () => {
   const [searchBar, setSearchBar] = useState(false);
   const [notifBar, setNotifBar] = useState(false);
   const location = useLocation();
   const dispatch = useDispatch();
+  const user = useSelector(selectCurrentUser);
 
   const alternateBar =
     searchBar || notifBar || location.pathname === "/direct/inbox";
@@ -200,7 +202,7 @@ const Navbar = () => {
             </span>
           </li>
           <NavLink
-            to={`/halfz`}
+            to={`/${user?.username}`}
             className="navList"
             onClick={handleCloseAlternateBar}
           >

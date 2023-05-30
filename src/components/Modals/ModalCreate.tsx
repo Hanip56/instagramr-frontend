@@ -48,7 +48,7 @@ const ModalCreate = () => {
         {!isLoading && (
           <form
             onSubmit={handleSubmit}
-            className="w-[80vw] lg:w-[50rem] bg-lightBg dark:bg-grayIg rounded-md overflow-hidden"
+            className="w-[80vw] lg:w-[50rem] bg-lightBg dark:bg-grayIg rounded-md overflow-hidden animate-fadeIn"
             encType="multipart/form-data"
           >
             <div className="flex justify-between items-center px-6 py-3 border border-transparent border-b-darkBg/10 dark:border-b-white/20">
