@@ -3,16 +3,19 @@ import { useRef } from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { hideModalCreate } from "../../app/features/modal/modalSlice";
+import { useCreatePostMutation } from "../../app/features/post/postApiSlice";
+import { Spinner } from "..";
 
 const ModalCreate = () => {
   const [caption, setCaption] = useState("");
   const [postImage, setPostImage] = useState<File>();
-
   const dispatch = useDispatch();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const isLoading = false;
-  const isSuccess = false;
+  const [createPost, { isLoading, isError, isSuccess, error }] =
+    useCreatePostMutation();
+
+  console.log({ error });
 
   useEffect(() => {
     if (isSuccess) {
@@ -22,18 +25,26 @@ const ModalCreate = () => {
 
   const handleClose = () => {
     dispatch(hideModalCreate());
+
     // dispatch(resetCP());
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // const formdata = new FormData();
+    console.log({
+      contentType: postImage?.type,
+      content: postImage,
+      caption,
+    });
 
-    // formdata.append("postimage", postImage);
-    // formdata.append("caption", caption);
+    const formdata = new FormData();
 
-    // dispatch(createPost(formdata));
+    formdata.append("contentType", "string");
+    formdata.append("contents", postImage as File);
+    formdata.append("caption", caption);
+
+    await createPost(formdata);
   };
 
   return (
@@ -44,7 +55,7 @@ const ModalCreate = () => {
       ></div>
 
       <div className="fixed left-[50%] top-[50%] -translate-y-[50%] -translate-x-[50%] z-50 flex justify-center items-center rounded-md text-lightText dark:text-darkText">
-        {/* {isLoading && <Spinner />} */}
+        {isLoading && <Spinner />}
         {!isLoading && (
           <form
             onSubmit={handleSubmit}
@@ -61,7 +72,7 @@ const ModalCreate = () => {
               </button>
             </div>
             <div className="flex flex-col md:flex-row h-[30rem]">
-              <div className="basis-[65%] w-full h-full bg-lightBg dark:bg-grayIg flex justify-center items-center">
+              <div className="flex-1 md:basis-[65%] h-2 md:h-full bg-lightBg dark:bg-grayIg flex justify-center items-center">
                 {/* input file */}
                 {postImage ? (
                   <img

@@ -1,5 +1,5 @@
 import { useRef, useState, FormEvent } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { hideModalPost } from "../../app/features/modal/modalSlice";
 import {
   IoHeartOutline,
@@ -19,21 +19,25 @@ import { get_time_diff } from "../../utils/getTimeDiff";
 import { BASE_URL } from "../../constants";
 
 import { SkeletonModalPost } from "..";
-import { postData } from "../../dummyData";
+import { RootState } from "../../app/store";
+import { PostType, UserType } from "../../../types";
+import { selectCurrentUser } from "../../app/features/auth/authSlice";
 
 const ModalPost = () => {
   const dispatch = useDispatch();
-
-  const currentPost = postData;
-  const isLoading = false;
+  const user = useSelector(selectCurrentUser) as UserType;
+  const currentPost = useSelector(
+    (state: RootState) => state.modal.modalPayload
+  ) as PostType;
 
   const [comment, setComment] = useState("");
   const [showEmojiBox, setShowEmojiBox] = useState(false);
   const emojiBoxRef = useRef(null);
 
-  const liked = false;
-  const totalLikes = 1;
-  const saved = false;
+  const liked = currentPost.likes.some((u) => u._id === user._id);
+  const totalLikes = currentPost.totalLikes;
+  const saved = currentPost.savedBy.some((u) => u === user._id);
+  const isLoading = false;
 
   const handleHideModal = () => {
     dispatch(hideModalPost());
@@ -51,9 +55,9 @@ const ModalPost = () => {
     e.preventDefault();
   };
 
-  const isOwnUser = false;
+  const isOwnUser = currentPost.postedBy._id === user._id;
 
-  const isFollowed = false;
+  const isFollowed = user.followings.includes(currentPost.postedBy._id);
 
   const handleFollow = async () => {
     console.log("handleUnfollow");
@@ -90,7 +94,7 @@ const ModalPost = () => {
         onClick={handleNavigateToUser}
       >
         <img
-          src={currentPost?.postedBy?.profilePicture}
+          src={`${BASE_URL}/${currentPost?.postedBy?.profilePicture}`}
           alt={currentPost?.postedBy?.username}
         />
       </div>
@@ -102,7 +106,7 @@ const ModalPost = () => {
 
           {!isFollowed && !isOwnUser ? (
             <span
-              className="text-xs text-blue-ig cursor-pointer"
+              className="text-xs text-blue-500 cursor-pointer"
               onClick={handleFollow}
             >
               {" "}
@@ -143,7 +147,7 @@ const ModalPost = () => {
             <div className="basis-[75%] sm:basis-[65%] bg-black overflow-hidden">
               <div className="w-full h-full">
                 <img
-                  src={currentPost?.image}
+                  src={`${BASE_URL}/${currentPost?.content[0]}`}
                   alt={currentPost?.caption}
                   className="w-full h-full object-contain object-center"
                 />
@@ -155,7 +159,7 @@ const ModalPost = () => {
                 <div className="flex gap-x-4">
                   <div className="w-8 h-8 rounded-full overflow-hidden">
                     <img
-                      src={currentPost?.postedBy?.profilePicture}
+                      src={`${BASE_URL}/${currentPost?.postedBy?.profilePicture}`}
                       alt={currentPost?.postedBy?.username}
                     />
                   </div>
@@ -175,7 +179,7 @@ const ModalPost = () => {
                       <Link to={`/${comment?.user?.username}`}>
                         <div className="w-8 h-8 rounded-full overflow-hidden">
                           <img
-                            src={comment?.user?.profilePicture}
+                            src={`${BASE_URL}/${currentPost?.postedBy?.profilePicture}`}
                             alt={comment?.user?.username}
                           />
                         </div>

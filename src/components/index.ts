@@ -24,3 +24,6 @@ export { default as SkeletonModalPost } from "./skeletons/SkeletonModalPost";
 export { default as ModalCardOptions } from "./Modals/ModalCardOptions";
 export { default as ModalPost } from "./Modals/ModalPost";
 export { default as ModalCreate } from "./Modals/ModalCreate";
+
+// UI
+export { default as Spinner } from "./UI/Spinner";

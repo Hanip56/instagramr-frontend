@@ -31,9 +31,9 @@ const baseQueryWithReauth: BaseQueryFn = async (args, api, extraOptions) => {
       api.dispatch(setCredentials({ ...refreshResult.data }));
 
       result = await baseQuery(args, api, extraOptions);
+    } else {
+      api.dispatch(logout());
     }
-  } else {
-    api.dispatch(logout());
   }
 
   return result;
@@ -42,7 +42,7 @@ const baseQueryWithReauth: BaseQueryFn = async (args, api, extraOptions) => {
 const apiSlice = createApi({
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({}),
-  tagTypes: [],
+  tagTypes: ["ExplorePost"],
 });
 
 export default apiSlice;
