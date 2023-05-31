@@ -2,10 +2,12 @@ import { BiUserPlus } from "react-icons/bi";
 import { BsBookmark, BsGearWide, BsThreeDots } from "react-icons/bs";
 import { MdOutlineGridOn, MdOutlinePersonPin } from "react-icons/md";
 import { useSelector } from "react-redux";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useOutletContext } from "react-router-dom";
 import { selectCurrentUser } from "../app/features/auth/authSlice";
 import { UserType } from "../../types";
 import { BASE_URL } from "../constants";
+import { useGetSingleUserQuery } from "../app/features/user/userApiSlice";
+import { Footer } from "../components";
 
 const Profile = () => {
   const location = useLocation();
@@ -13,6 +15,12 @@ const Profile = () => {
 
   const currentUsername = location.pathname.split("/")[1];
   const section = location.pathname.split("/")[2];
+
+  const { data: shownUser, isLoading } = useGetSingleUserQuery(currentUsername);
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   const isOwnUser = user.username === currentUsername;
 
@@ -49,8 +57,8 @@ const Profile = () => {
               <div className="w-[91%] h-[91%] rounded-full bg-gray-300 overflow-hidden">
                 <img
                   className="w-full h-full object-cover"
-                  src={`${BASE_URL}/${user?.profilePicture}`}
-                  alt={user?.username}
+                  src={`${BASE_URL}/${shownUser?.profilePicture}`}
+                  alt={shownUser?.username}
                 />
               </div>
             </div>
@@ -59,7 +67,7 @@ const Profile = () => {
           <div className="md:block flex-1 space-y-4 md:space-y-7">
             <div className="flex items-center gap-6">
               {/* username */}
-              <span>{user?.username}</span>
+              <span>{shownUser?.username}</span>
               <div className="hidden md:block">{profileButtonsContainer()}</div>
               {!isOwnUser && (
                 <button className="text-2xl">
@@ -75,15 +83,15 @@ const Profile = () => {
             {/* status */}
             <ul className="hidden md:flex gap-12 text-base">
               <li>
-                <span className="font-bold">{user?.totalPost}</span>{" "}
+                <span className="font-bold">{shownUser?.totalPost}</span>{" "}
                 <span>posts</span>
               </li>
               <li>
-                <span className="font-bold">{user?.totalFollowers}</span>{" "}
+                <span className="font-bold">{shownUser?.totalFollowers}</span>{" "}
                 <span>followers</span>
               </li>
               <li>
-                <span className="font-bold">{user?.totalFollowings}</span>{" "}
+                <span className="font-bold">{shownUser?.totalFollowings}</span>{" "}
                 <span>following</span>
               </li>
             </ul>
@@ -91,27 +99,27 @@ const Profile = () => {
             <div className="block md:hidden">{profileButtonsContainer()}</div>
             {/* bio */}
             <div className="hidden md:block">
-              <p>{user?.profileBio}</p>
+              <p>{shownUser?.profileBio}</p>
             </div>
           </div>
         </div>
         <div className="block md:hidden">
-          <p>{user?.profileBio}</p>
+          <p>{shownUser?.profileBio}</p>
         </div>
       </header>
 
       {/* status info for small screen */}
       <ul className="flex py-4 text-sm md:hidden gap-12 border border-transparent border-t-grayIg/10 dark:border dark:border-t-lightBg/20 text-center">
         <li className="flex-1">
-          <span className="font-bold">{user.totalPost}</span> <br />
+          <span className="font-bold">{shownUser?.totalPost}</span> <br />
           <span>posts</span>
         </li>
         <li className="flex-1">
-          <span className="font-bold">{user.totalFollowers}</span> <br />
+          <span className="font-bold">{shownUser?.totalFollowers}</span> <br />
           <span>followers</span>
         </li>
         <li className="flex-1">
-          <span className="font-bold">{user.totalFollowings}</span>
+          <span className="font-bold">{shownUser?.totalFollowings}</span>
           <br /> <span>following</span>
         </li>
       </ul>
@@ -151,9 +159,15 @@ const Profile = () => {
           <span>TAGGED</span>
         </Link>
       </div>
-      <Outlet />
+      <Outlet context={shownUser} />
+
+      <Footer />
     </div>
   );
+};
+
+export const useShownUser = () => {
+  return useOutletContext<UserType | undefined>();
 };
 
 export default Profile;

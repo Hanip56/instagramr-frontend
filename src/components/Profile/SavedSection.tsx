@@ -1,16 +1,15 @@
 import { BsBookmark, BsPlus } from "react-icons/bs";
 import postImage from "../../dummyData/postImage.jpg";
 import EmptySection from "./EmptySection";
-import { useSelector } from "react-redux";
-import { selectCurrentUser } from "../../app/features/auth/authSlice";
+import { useShownUser } from "../../pages/Profile";
 
 const SavedSection = () => {
-  const user = useSelector(selectCurrentUser);
+  const user = useShownUser();
 
   const saved = user?.saved;
 
   const content = () => {
-    if (saved.length < 1)
+    if (saved && saved.length < 1)
       return (
         <EmptySection
           logo={<BsBookmark />}

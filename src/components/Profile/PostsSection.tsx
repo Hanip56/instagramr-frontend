@@ -1,16 +1,15 @@
 import React from "react";
 import { PostMiniCard } from "..";
-import { useSelector } from "react-redux";
-import { selectCurrentUser } from "../../app/features/auth/authSlice";
 import EmptySection from "./EmptySection";
 import { BsCamera } from "react-icons/bs";
+import { useShownUser } from "../../pages/Profile";
 
 const PostsSection = () => {
-  const user = useSelector(selectCurrentUser);
+  const user = useShownUser();
 
   const posts = user?.posts;
 
-  if (posts.length < 1)
+  if (posts && posts.length < 1)
     return (
       <EmptySection
         logo={<BsCamera />}
@@ -19,9 +18,13 @@ const PostsSection = () => {
       />
     );
 
+  console.log({ posts });
+
   return (
     <main className="w-full grid grid-cols-3 gap-1 py-6 px-0 md:px-2">
-      {posts.length > 0 && posts.map((key, idx) => <PostMiniCard key={idx} />)}
+      {posts &&
+        posts.length > 0 &&
+        posts.map((post) => <PostMiniCard key={post._id} post={post} />)}
     </main>
   );
 };

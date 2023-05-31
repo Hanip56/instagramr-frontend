@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
 import { PostType } from "../../types";
 import { BASE_URL } from "../constants";
-import postImage from "../dummyData/postImage.jpg";
 import { BsFillChatFill, BsHeartFill } from "react-icons/bs";
 import { showModalPost } from "../app/features/modal/modalSlice";
 
@@ -13,13 +12,13 @@ const PostMiniCard = ({ post }: PropTypes) => {
   const dispatch = useDispatch();
 
   const handleOpenModal = () => {
-    dispatch(showModalPost(post));
+    dispatch(showModalPost(post._id));
   };
 
   return (
     <div
       onClick={handleOpenModal}
-      className="relative bg-gray-300 w-full h-0 pb-[100%] group cursor-pointer"
+      className="relative bg-grayIg w-full h-0 pb-[100%] group cursor-pointer"
     >
       {/* overlay */}
       <div className="absolute z-10 top-0 left-0 w-full h-full bg-darkBg/25 hidden justify-center items-center group-hover:flex flex-col md:flex-row gap-x-8 gap-y-1 text-white font-bold">

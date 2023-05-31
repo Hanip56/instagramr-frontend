@@ -8,6 +8,13 @@ type ExplorePostsState = {
 
 const postApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
+    createPost: builder.mutation({
+      query: (body) => ({
+        url: "/api/post",
+        method: "POST",
+        body,
+      }),
+    }),
     getExplorePost: builder.query<ExplorePostsState, string>({
       query: (pageNumber) => `/api/post?page=${pageNumber}`,
       providesTags: (result, error, arg) =>
@@ -35,14 +42,14 @@ const postApiSlice = apiSlice.injectEndpoints({
         return currentArg !== previousArg;
       },
     }),
-    createPost: builder.mutation({
-      query: (body) => ({
-        url: "/api/post",
-        method: "POST",
-        body,
-      }),
+    getSinglePost: builder.query<PostType, string>({
+      query: (postId) => `/api/post/${postId}`,
     }),
   }),
 });
 
-export const { useGetExplorePostQuery, useCreatePostMutation } = postApiSlice;
+export const {
+  useGetExplorePostQuery,
+  useCreatePostMutation,
+  useGetSinglePostQuery,
+} = postApiSlice;

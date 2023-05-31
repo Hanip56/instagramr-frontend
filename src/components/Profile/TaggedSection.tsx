@@ -1,12 +1,10 @@
-import React from "react";
 import { PostMiniCard } from "..";
 import EmptySection from "./EmptySection";
 import { MdOutlinePersonPin } from "react-icons/md";
-import { useSelector } from "react-redux";
-import { selectCurrentUser } from "../../app/features/auth/authSlice";
+import { useShownUser } from "../../pages/Profile";
 
 const TaggedSection = () => {
-  const user = useSelector(selectCurrentUser);
+  const user = useShownUser();
 
   const tagged = []; // In development
 

@@ -22,6 +22,7 @@ import { MenuBar, NotifNavbar, SearchNavbar } from ".";
 import { useDispatch, useSelector } from "react-redux";
 import { showModalCreate } from "../app/features/modal/modalSlice";
 import { selectCurrentUser } from "../app/features/auth/authSlice";
+import { BASE_URL } from "../constants";
 
 const Navbar = () => {
   const [searchBar, setSearchBar] = useState(false);
@@ -208,12 +209,19 @@ const Navbar = () => {
           >
             {({ isActive }) => (
               <>
-                <span className="text-[25px] p-0 md:p-2 lg:p-3">
-                  {(!isActive || (isActive && alternateBar)) && (
-                    <IoPeopleCircleOutline />
-                  )}
-                  {isActive && !alternateBar && <IoPeopleCircle />}
-                </span>
+                <div
+                  className={`w-[25px] h-[25px] rounded-full overflow-hidden m-0 md:m-2 lg:m-3 ${
+                    isActive ? "border-2" : ""
+                  }`}
+                >
+                  <div className="w-full h-full rounded-full overflow-hidden">
+                    <img
+                      src={`${BASE_URL}/${user?.profilePicture}`}
+                      alt={user?.username}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
                 <span
                   className={`hidden ${
                     alternateBar ? "" : "lg:inline-block"

@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserType } from "../../../../types/index";
 import { RootState } from "../../store";
+import { useFollowUserMutation } from "../user/userApiSlice";
 
 type initialStateType = {
   user: UserType | undefined;
@@ -29,6 +30,17 @@ const authSlice = createSlice({
       state.user = undefined;
       state.token = undefined;
     },
+    followUserState: (state, action) => {
+      if (!state.user?.followings.some((userId) => userId === action.payload)) {
+        state.user?.followings.push(action.payload);
+      }
+    },
+    unfollowUserState: (state, action) => {
+      const index = state.user?.followings?.indexOf(action.payload);
+      if (index !== undefined && index !== -1) {
+        state.user?.followings.splice(index, 1); // Remove 1 element at the specified index
+      }
+    },
   },
 });
 
@@ -36,6 +48,7 @@ export const selectCurrentUser = (state: RootState) =>
   state.auth.user as UserType;
 export const selectCurrentToken = (state: RootState) => state.auth.token;
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { setCredentials, logout, followUserState, unfollowUserState } =
+  authSlice.actions;
 
 export default authSlice.reducer;
