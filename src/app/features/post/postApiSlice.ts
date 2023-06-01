@@ -6,6 +6,12 @@ type ExplorePostsState = {
   maxPages: number;
 };
 
+type FollowingPostResponse = {
+  posts: PostType[];
+  totalPosts: number;
+  maxPages: number;
+};
+
 const postApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     createPost: builder.mutation({
@@ -29,7 +35,6 @@ const postApiSlice = apiSlice.injectEndpoints({
           : [{ type: "ExplorePost", id: "LIST" }],
       // Only have one cache entry because the arg always maps to one string
       serializeQueryArgs: ({ endpointName }) => {
-        console.log({ endpointName });
         return endpointName;
       },
       // Always merge incoming data to the cache entry
@@ -45,6 +50,32 @@ const postApiSlice = apiSlice.injectEndpoints({
     getSinglePost: builder.query<PostType, string>({
       query: (postId) => `/api/post/${postId}`,
     }),
+    getFollowingPost: builder.query<FollowingPostResponse, number>({
+      query: (pageNumber) => `/api/post/postFollowing?page=${pageNumber}`,
+      keepUnusedDataFor: Infinity,
+      providesTags: (result, error, arg) =>
+        result
+          ? [
+              { type: "FollowingPost", id: "LIST" },
+              ...result.posts.map((post) => ({
+                type: "FollowingPost" as const,
+                id: post._id,
+              })),
+            ]
+          : [{ type: "FollowingPost", id: "LIST" }],
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName;
+      },
+      // Always merge incoming data to the cache entry
+      merge: (currentCache, newItems) => {
+        const { posts } = newItems;
+        currentCache.posts.push(...posts);
+      },
+      // Refetch when the page arg changes
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
+      },
+    }),
   }),
 });
 
@@ -52,4 +83,5 @@ export const {
   useGetExplorePostQuery,
   useCreatePostMutation,
   useGetSinglePostQuery,
+  useGetFollowingPostQuery,
 } = postApiSlice;

@@ -1,33 +1,61 @@
 import { Link } from "react-router-dom";
 import { Card, SkeletonPost, StatusUser } from "../components";
 import { postData } from "../dummyData";
+import { useGetFollowingPostQuery } from "../app/features/post/postApiSlice";
+import { createRef, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../app/store";
+import { nextPageFollowingPost } from "../app/features/post/postSlice";
 
 const Home = () => {
-  const isLoadingPF = false;
-  const isError = false;
+  const { followingPostPage } = useSelector((state: RootState) => state.post);
+  const { data, isError, isLoading, isFetching } =
+    useGetFollowingPostQuery(followingPostPage);
+  const dispatch = useDispatch();
+
+  const FollowingPost = data?.posts;
   const postsFollowing = false;
+
+  const handleScroll = () => {
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+    const scrollPosition = window.scrollY;
+
+    if (scrollPosition + windowHeight === documentHeight) {
+      // Reached the end of the window scrollbar
+      if (data?.maxPages && followingPostPage < data?.maxPages && !isFetching) {
+        dispatch(nextPageFollowingPost());
+      }
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [followingPostPage, data?.maxPages]);
 
   return (
     <div className="max-w-[1013px] mx-auto flex justify-center h-screen pt-10">
       <div className="w-[100vw] xs:w-[calc(100vw-1.1rem)] md:max-w-[630px] lg:max-w-[694px] lg:pr-16 h-full flex-shrink">
         <StatusUser />
         <div className="w-full flex justify-center">
-          <div className="basis-[470px] flex flex-col items-center gap-y-4 pb-20">
-            {isLoadingPF &&
+          <div className="basis-[470px] flex flex-col items-center gap-y-4 pb-4">
+            {isLoading &&
               Array(3)
                 .fill("")
                 .map((key, idx) => <SkeletonPost key={idx} />)}
-            {!isLoadingPF &&
-              Array(3)
-                .fill("")
-                .map((key, idx) => <Card key={idx} />)}
+            {!isLoading &&
+              FollowingPost?.map((post) => <Card key={post._id} post={post} />)}
           </div>
-          {/* {!isLoadingPF &&
+          {/* {!isLoading &&
             !isError &&
             (postsFollowing?.ids ?? []).length < 1 && (
               <h1>There's no post, Let's Follow someone!!</h1>
             )} */}
-          {/* {!isLoadingPF && !isError && (
+          {/* {!isLoading && !isError && (
             <>
               {(postsFollowing?.ids ?? []).map((postId) => (
                 <Card
@@ -39,6 +67,10 @@ const Home = () => {
             </>
           )} */}
         </div>
+        {/* loading fetching */}
+        {isFetching && (
+          <div className="w-8 h-8 border-2 border-t-transparent animate-spin rounded-full mx-auto my-8" />
+        )}
       </div>
 
       <aside className="hidden xl:block w-[319px] h-80 mt-2">

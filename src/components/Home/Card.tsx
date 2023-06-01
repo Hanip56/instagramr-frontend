@@ -21,8 +21,14 @@ import {
   showModalCardOptions,
   showModalPost,
 } from "../../app/features/modal/modalSlice";
+import { PostType } from "../../../types";
+import { BASE_URL } from "../../constants";
 
-const Card = () => {
+type PropTypes = {
+  post: PostType;
+};
+
+const Card = ({ post }: PropTypes) => {
   const [comment, setComment] = useState("");
   const [showEmojiBox, setShowEmojiBox] = useState(false);
   const emojiBoxRef = useRef(null);
@@ -45,7 +51,7 @@ const Card = () => {
   };
 
   const handleShowModal = () => {
-    dispatch(showModalPost({}));
+    dispatch(showModalPost(post._id));
   };
 
   const handleShowModalCardOptions = () => {
@@ -74,7 +80,7 @@ const Card = () => {
           >
             <div className="w-[90%] h-[90%] rounded-full overflow-hidden">
               <img
-                src={post.image}
+                src={`${BASE_URL}/${post?.postedBy.profilePicture}`}
                 alt={post?.postedBy.username}
                 className="w-full h-full object-cover object-center"
               />
@@ -95,7 +101,7 @@ const Card = () => {
       <main>
         <div className="w-full max-h-[30rem] overflow-hidden">
           <img
-            src={post.image}
+            src={`${BASE_URL}/${post?.content[0]}`}
             alt="post img"
             className="object-contain w-full h-full object-center"
           />

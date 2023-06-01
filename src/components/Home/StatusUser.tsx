@@ -39,8 +39,6 @@ const StatusUser = () => {
     }
   };
 
-  console.log({ scrollLeft });
-
   return (
     <div className="relative flex items-center w-full h-[85px] mb-4">
       {showChevLeft && (
