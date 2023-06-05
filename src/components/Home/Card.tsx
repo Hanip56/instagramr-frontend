@@ -26,6 +26,7 @@ import { PostType, UserType } from "../../../types";
 import { BASE_URL } from "../../constants";
 import { selectCurrentUser } from "../../app/features/auth/authSlice";
 import {
+  useAddCommentMutation,
   useLikeAndUnlikeMutation,
   useSaveAndUnsaveMutation,
 } from "../../app/features/post/postApiSlice";
@@ -43,6 +44,7 @@ const Card = ({ post }: PropTypes) => {
 
   const [likeAndUnlike] = useLikeAndUnlikeMutation();
   const [saveAndUnsave] = useSaveAndUnsaveMutation();
+  const [addComment] = useAddCommentMutation();
 
   const liked = post?.likes.some((u) => u._id === user._id);
   const saved = post?.savedBy.some((u) => u === user._id);
@@ -72,6 +74,15 @@ const Card = ({ post }: PropTypes) => {
 
   const handleSubmitComment = async (e: FormEvent) => {
     e.preventDefault();
+
+    const resComment = await addComment({
+      comment,
+      postId: post?._id ?? "",
+    });
+
+    if ("data" in resComment) {
+      setComment("");
+    }
   };
 
   const handleShowModal = () => {
@@ -79,7 +90,7 @@ const Card = ({ post }: PropTypes) => {
   };
 
   const handleShowModalCardOptions = () => {
-    dispatch(showModalCardOptions({}));
+    dispatch(showModalCardOptions(post));
   };
 
   const postDate = new Date(post?.createdAt);
@@ -208,6 +219,7 @@ const Card = ({ post }: PropTypes) => {
               className={`${
                 comment ? "text-blue-400" : "text-blue-300/80"
               } font-semibold text-xs`}
+              disabled={!comment}
             >
               Post
             </button>

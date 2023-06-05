@@ -2,6 +2,7 @@ export type UserShortType = {
   _id: string;
   username: string;
   profilePicture?: string;
+  fullname?: string;
 };
 
 export type UserType = {

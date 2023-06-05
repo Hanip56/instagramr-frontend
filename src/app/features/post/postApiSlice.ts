@@ -225,6 +225,7 @@ const postApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: (result, err, arg) => [
         { type: "SinglePost", id: arg.postId },
+        { type: "FollowingPost", id: arg.postId },
       ],
     }),
   }),
