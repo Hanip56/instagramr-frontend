@@ -6,6 +6,7 @@ import {
   IoPaperPlaneOutline,
   IoBookmarkOutline,
   IoBookmarkSharp,
+  IoBookmark,
 } from "react-icons/io5";
 import { BsThreeDots } from "react-icons/bs";
 import { VscSmiley } from "react-icons/vsc";
@@ -16,13 +17,18 @@ import Picker from "@emoji-mart/react";
 import useOutsideAlerter from "../../utils/ClickOutside";
 // import { BASE_URL } from "../../constants";
 import { postData as post } from "../../dummyData";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   showModalCardOptions,
   showModalPost,
 } from "../../app/features/modal/modalSlice";
-import { PostType } from "../../../types";
+import { PostType, UserType } from "../../../types";
 import { BASE_URL } from "../../constants";
+import { selectCurrentUser } from "../../app/features/auth/authSlice";
+import {
+  useLikeAndUnlikeMutation,
+  useSaveAndUnsaveMutation,
+} from "../../app/features/post/postApiSlice";
 
 type PropTypes = {
   post: PostType;
@@ -31,19 +37,37 @@ type PropTypes = {
 const Card = ({ post }: PropTypes) => {
   const [comment, setComment] = useState("");
   const [showEmojiBox, setShowEmojiBox] = useState(false);
+  const user = useSelector(selectCurrentUser) as UserType;
   const emojiBoxRef = useRef(null);
   const dispatch = useDispatch();
 
-  const liked = false;
-  const saved = false;
+  const [likeAndUnlike] = useLikeAndUnlikeMutation();
+  const [saveAndUnsave] = useSaveAndUnsaveMutation();
 
-  const isCommented = ["1"];
+  const liked = post?.likes.some((u) => u._id === user._id);
+  const saved = post?.savedBy.some((u) => u === user._id);
+
+  console.log({ postCard: post });
+
+  const isCommented = post?.comments.filter((u) => u.user._id === user._id);
+  const latestComment = isCommented.slice(-2);
 
   const handleLoves = async () => {
     console.log("handleLoves");
+    await likeAndUnlike({
+      postId: post?._id ?? "",
+      user: {
+        _id: user?._id,
+        username: user?.username,
+        profilePicture: user?.profilePicture,
+      },
+    });
   };
   const handleSave = async () => {
-    console.log("handleSave");
+    await saveAndUnsave({
+      postId: post?._id ?? "",
+      userId: user?._id,
+    });
   };
 
   const handleSubmitComment = async (e: FormEvent) => {
@@ -110,19 +134,19 @@ const Card = ({ post }: PropTypes) => {
           <div className="flex items-center gap-x-4 py-3">
             <button onClick={handleLoves}>
               {liked && <IoHeartSharp className="text-red-500" />}
-              {!liked && <IoHeartOutline className="hover:text-black/40" />}
+              {!liked && <IoHeartOutline className="hover:opacity-75" />}
             </button>
-            <button className="hover:text-black/40" onClick={handleShowModal}>
+            <button className="hover:opacity-75" onClick={handleShowModal}>
               <IoChatbubbleOutline />
             </button>
-            <button className="hover:text-black/40">
+            <button className="hover:opacity-75">
               <IoPaperPlaneOutline />
             </button>
           </div>
           <div>
-            <button className="hover:text-black/40" onClick={handleSave}>
-              {saved && <IoBookmarkSharp className="text-black" />}
-              {!saved && <IoBookmarkOutline className="hover:text-black/40" />}
+            <button className="hover:opacity-75" onClick={handleSave}>
+              {saved && <IoBookmark className="text-black dark:text-white" />}
+              {!saved && <IoBookmarkOutline className="hover:opacity-75" />}
             </button>
           </div>
         </div>
@@ -140,13 +164,13 @@ const Card = ({ post }: PropTypes) => {
               View all comments
             </p>
           )}
-          {/* {isCommented?.length > 0 &&
-            isCommented.map((comment, idx) => (
+          {latestComment?.length > 0 &&
+            latestComment.map((comment, idx) => (
               <p key={idx}>
                 <span className="font-bold">{comment?.user?.username} </span>
                 {comment?.comment}
               </p>
-            ))} */}
+            ))}
           <p
             className="text-gray-400 font-light text-xs"
             onClick={handleShowModal}

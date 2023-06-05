@@ -8,6 +8,7 @@ import {
   IoPaperPlaneOutline,
   IoBookmarkOutline,
   IoBookmarkSharp,
+  IoBookmark,
 } from "react-icons/io5";
 import { VscSmiley } from "react-icons/vsc";
 import { Link } from "react-router-dom";
@@ -30,7 +31,12 @@ import {
   useFollowUserMutation,
   useUnfollowUserMutation,
 } from "../../app/features/user/userApiSlice";
-import { useGetSinglePostQuery } from "../../app/features/post/postApiSlice";
+import {
+  useAddCommentMutation,
+  useGetSinglePostQuery,
+  useLikeAndUnlikeMutation,
+  useSaveAndUnsaveMutation,
+} from "../../app/features/post/postApiSlice";
 
 const ModalPost = () => {
   const dispatch = useDispatch();
@@ -44,25 +50,50 @@ const ModalPost = () => {
 
   const [follow] = useFollowUserMutation();
   const [unfollow] = useUnfollowUserMutation();
+  const [likeAndUnlike] = useLikeAndUnlikeMutation();
+  const [saveAndUnsave] = useSaveAndUnsaveMutation();
+  const [addComment] = useAddCommentMutation();
 
   const liked = currentPost?.likes.some((u) => u._id === user._id);
-  const totalLikes = currentPost?.totalLikes;
+  const totalLikes = currentPost?.likes.length;
   const saved = currentPost?.savedBy.some((u) => u === user._id);
+
+  console.log({ postModal: currentPost });
 
   const handleHideModal = () => {
     dispatch(hideModalPost());
   };
 
   const handleSave = async () => {
-    console.log("handleSave");
+    await saveAndUnsave({
+      postId: currentPost?._id ?? "",
+      userId: user?._id,
+    });
   };
 
   const handleLoves = async () => {
     console.log("handleLoves");
+    await likeAndUnlike({
+      postId: currentPost?._id ?? "",
+      user: {
+        _id: user?._id,
+        username: user?.username,
+        profilePicture: user?.profilePicture,
+      },
+    });
   };
 
-  const handleSubmitComment = (e: FormEvent) => {
+  const handleSubmitComment = async (e: FormEvent) => {
     e.preventDefault();
+
+    const resComment = await addComment({
+      comment,
+      postId: currentPost?._id ?? "",
+    });
+
+    if ("data" in resComment) {
+      setComment("");
+    }
   };
 
   const isOwnUser = currentPost?.postedBy._id === user._id;
@@ -226,9 +257,15 @@ const ModalPost = () => {
                   <div className="px-3">
                     <div className="flex items-center gap-x-4 text-2xl mt-3 mb-2">
                       <button onClick={handleLoves}>
-                        {liked && <IoHeartSharp className="text-red-500" />}
+                        {liked && (
+                          <span className="text-red-500">
+                            <IoHeartSharp />
+                          </span>
+                        )}
                         {!liked && (
-                          <IoHeartOutline className="hover:opacity-75" />
+                          <span className="hover:opacity-75">
+                            <IoHeartOutline />
+                          </span>
                         )}
                       </button>
                       <button className="hover:opacity-75">
@@ -241,7 +278,9 @@ const ModalPost = () => {
                         className="hover:opacity-75 ml-auto"
                         onClick={handleSave}
                       >
-                        {saved && <IoBookmarkSharp className="text-black" />}
+                        {saved && (
+                          <IoBookmark className="text-black dark:text-white" />
+                        )}
                         {!saved && (
                           <IoBookmarkOutline className="hover:opacity-75" />
                         )}
@@ -296,6 +335,7 @@ const ModalPost = () => {
                         className={`${
                           comment ? "text-blue-400" : "text-blue-300/80"
                         } font-semibold text-sm`}
+                        disabled={!comment}
                       >
                         Post
                       </button>
