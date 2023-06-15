@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { createRef, useState } from "react";
 import {
   AiOutlineCompass,
   AiOutlineHeart,
@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { showModalCreate } from "../app/features/modal/modalSlice";
 import { selectCurrentUser } from "../app/features/auth/authSlice";
 import { BASE_URL } from "../constants";
+import useOutsideAlerter from "../hooks/useOutsideAlerter";
 
 const Navbar = () => {
   const [searchBar, setSearchBar] = useState(false);
@@ -30,6 +31,9 @@ const Navbar = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const user = useSelector(selectCurrentUser);
+  const navRef = createRef<HTMLDivElement>();
+  const searchNavRef = createRef<HTMLDivElement>();
+  const searchNotifRef = createRef<HTMLDivElement>();
 
   const alternateBar =
     searchBar || notifBar || location.pathname === "/direct/inbox";
@@ -42,12 +46,22 @@ const Navbar = () => {
   const handleCreateButton = () => {
     dispatch(showModalCreate());
   };
+
+  useOutsideAlerter(navRef, setSearchBar, searchNavRef);
+  useOutsideAlerter(navRef, setNotifBar, searchNotifRef);
+
   return (
     <>
-      {searchBar && <SearchNavbar />}
-      {notifBar && <NotifNavbar />}
+      {searchBar && (
+        <SearchNavbar
+          ref={searchNavRef}
+          handleCloseSearchBar={() => setSearchBar(false)}
+        />
+      )}
+      {notifBar && <NotifNavbar ref={searchNotifRef} />}
 
       <div
+        ref={navRef}
         className={`${
           alternateBar ? "" : "lg:w-[244px]"
         } fixed z-40 bottom-0 w-full md:w-fit px-3 py-5 bg-lightBg dark:bg-darkBg md:min-h-[100dvh] flex flex-col text-darkText border border-transparent md:border-r-darkBg/10 dark:md:border-r-white/20`}

@@ -11,6 +11,7 @@ import { toggleMode } from "../../app/features/mode/modeSlice";
 import { useLogoutMutation } from "../../app/features/auth/authApiSlice";
 import apiSlice from "../../app/api/api";
 import { useNavigate } from "react-router-dom";
+import { logout as logoutState } from "../../app/features/auth/authSlice";
 
 type PropTypes = {
   alternateBar: boolean;
@@ -37,15 +38,15 @@ const MenuBar = ({ alternateBar }: PropTypes) => {
     await logout();
 
     // reset cached data
+    dispatch(logoutState());
     dispatch(apiSlice.util.resetApiState());
-    // dispatch(
-    //   apiSlice.util.invalidateTags([
-    //     "ExplorePost",
-    //     "Post",
-    //     "PostsFollowing",
-    //     "SingleUser",
-    //   ])
-    // );
+    dispatch(
+      apiSlice.util.invalidateTags([
+        "ExplorePost",
+        "FollowingPost",
+        "SinglePost",
+      ])
+    );
     navigate("/login");
   };
 

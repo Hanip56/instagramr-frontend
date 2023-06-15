@@ -1,9 +1,12 @@
-import { AiFillCloseCircle } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { forwardRef } from "react";
 
-const NotifNavbar = () => {
+const NotifNavbar = forwardRef<HTMLDivElement>((_, ref) => {
   return (
-    <div className="w-[397px] h-full overflow-y-scroll hidden md:flex flex-col fixed top-0 bottom-0 left-[4.75rem] text-lightText dark:text-darkText bg-lightBg dark:bg-darkBg z-20 animate-fadeIn">
+    <div
+      ref={ref}
+      className="w-[397px] h-full overflow-y-scroll hidden md:flex flex-col fixed top-0 bottom-0 left-[4.75rem] text-lightText dark:text-darkText bg-lightBg dark:bg-darkBg z-20"
+    >
       <h1 className="font-semibold text-2xl mb-10 m-6">Notifications</h1>
       <div className="border border-transparent border-t-grayIg/10 dark:border-t-gray-200/20 p-6">
         <h2 className="mb-4 font-bold">Earlier</h2>
@@ -32,6 +35,6 @@ const NotifNavbar = () => {
       </div>
     </div>
   );
-};
+});
 
 export default NotifNavbar;
