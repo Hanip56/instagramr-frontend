@@ -11,6 +11,7 @@ export default {
         lightText: "#000000",
         darkText: "#fafafa",
         grayIg: "#262626",
+        semigrayIg: "#303030",
       },
       screens: {
         xs: "470px",

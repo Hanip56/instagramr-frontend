@@ -53,8 +53,9 @@ const postApiSlice = apiSlice.injectEndpoints({
         body,
       }),
     }),
-    getExplorePost: builder.query<ExplorePostsState, string>({
+    getExplorePost: builder.query<ExplorePostsState, number>({
       query: (pageNumber) => `/api/post?page=${pageNumber}`,
+      keepUnusedDataFor: Infinity,
       providesTags: (result, error, arg) =>
         result
           ? [

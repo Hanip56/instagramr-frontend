@@ -46,7 +46,7 @@ const Home = () => {
             {isLoading &&
               Array(3)
                 .fill("")
-                .map((key, idx) => <SkeletonPost key={idx} />)}
+                .map((_, idx) => <SkeletonPost key={idx} />)}
             {!isLoading &&
               FollowingPost?.map((post) => <Card key={post._id} post={post} />)}
           </div>

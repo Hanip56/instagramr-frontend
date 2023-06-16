@@ -30,12 +30,14 @@ import {
   useLikeAndUnlikeMutation,
   useSaveAndUnsaveMutation,
 } from "../../app/features/post/postApiSlice";
+import { SkeletonPostRect } from "..";
 
 type PropTypes = {
   post: PostType;
 };
 
 const Card = ({ post }: PropTypes) => {
+  const [imgLoaded, setImgLoaded] = useState(false);
   const [comment, setComment] = useState("");
   const [showEmojiBox, setShowEmojiBox] = useState(false);
   const user = useSelector(selectCurrentUser) as UserType;
@@ -134,11 +136,17 @@ const Card = ({ post }: PropTypes) => {
         </div>
       </header>
       <main>
+        {!imgLoaded && (
+          <div className="w-full h-[calc(30rem-58px)]">
+            <SkeletonPostRect />
+          </div>
+        )}
         <div className="w-full max-h-[30rem] overflow-hidden">
           <img
             src={`${BASE_URL}/${post?.content[0]}`}
             alt="post img"
             className="object-contain w-full h-full object-center"
+            onLoad={() => setImgLoaded(true)}
           />
         </div>
         <div className="flex items-center justify-between text-2xl">

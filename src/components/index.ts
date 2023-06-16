@@ -19,6 +19,7 @@ export { default as TaggedSection } from "./Profile/TaggedSection";
 // skeletons
 export { default as SkeletonPost } from "./skeletons/SkeletonPost";
 export { default as SkeletonModalPost } from "./skeletons/SkeletonModalPost";
+export { default as SkeletonPostRect } from "./skeletons/SkeletonPostRect";
 
 // Modals
 export { default as ModalCardOptions } from "./Modals/ModalCardOptions";
