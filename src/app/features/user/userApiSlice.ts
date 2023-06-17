@@ -6,6 +6,13 @@ type FindUserType = {
   totalFollowers: number;
 } & UserShortType;
 
+type EditUserType = {
+  fullname?: string;
+  username?: string;
+  profileBio?: string;
+  email?: string;
+};
+
 const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     findUser: builder.query<FindUserType[], string>({
@@ -29,6 +36,26 @@ const userApiSlice = apiSlice.injectEndpoints({
         method: "PATCH",
       }),
     }),
+    editProfile: builder.mutation<UserType, EditUserType>({
+      query: (userData) => ({
+        url: "/api/user/edit",
+        method: "PUT",
+        body: { ...userData },
+      }),
+    }),
+    editProfilePicture: builder.mutation<UserType, FormData>({
+      query: (formData) => ({
+        url: "/api/user/edit/profilePicture",
+        method: "PUT",
+        body: formData,
+      }),
+    }),
+    removeProfilePicture: builder.mutation({
+      query: () => ({
+        url: "/api/user/edit/profilePicture",
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -37,4 +64,7 @@ export const {
   useGetSingleUserQuery,
   useFollowUserMutation,
   useUnfollowUserMutation,
+  useEditProfileMutation,
+  useEditProfilePictureMutation,
+  useRemoveProfilePictureMutation,
 } = userApiSlice;

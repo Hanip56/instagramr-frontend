@@ -41,6 +41,16 @@ const authSlice = createSlice({
         state.user?.followings.splice(index, 1); // Remove 1 element at the specified index
       }
     },
+    editProfilePictureState: (state, action) => {
+      if (state.user != undefined) {
+        state.user.profilePicture = action.payload;
+      }
+    },
+    removeProfilePictureState: (state) => {
+      if (state.user != undefined) {
+        state.user.profilePicture = "default_profile_picture.png";
+      }
+    },
   },
 });
 
@@ -48,7 +58,13 @@ export const selectCurrentUser = (state: RootState) =>
   state.auth.user as UserType;
 export const selectCurrentToken = (state: RootState) => state.auth.token;
 
-export const { setCredentials, logout, followUserState, unfollowUserState } =
-  authSlice.actions;
+export const {
+  setCredentials,
+  logout,
+  followUserState,
+  unfollowUserState,
+  editProfilePictureState,
+  removeProfilePictureState,
+} = authSlice.actions;
 
 export default authSlice.reducer;

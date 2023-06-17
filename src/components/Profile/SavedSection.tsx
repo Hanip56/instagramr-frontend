@@ -4,7 +4,7 @@ import EmptySection from "./EmptySection";
 import { useShownUser } from "../../pages/Profile";
 
 const SavedSection = () => {
-  const user = useShownUser();
+  const { user } = useShownUser();
 
   const saved = user?.saved;
 

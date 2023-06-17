@@ -5,18 +5,23 @@ import { BsCamera } from "react-icons/bs";
 import { useShownUser } from "../../pages/Profile";
 
 const PostsSection = () => {
-  const user = useShownUser();
+  const { user, isOwnUser } = useShownUser();
 
   const posts = user?.posts;
 
-  if (posts && posts.length < 1)
-    return (
-      <EmptySection
-        logo={<BsCamera />}
-        title="Share Photos"
-        desc="When you share photos, they will appear on you profile"
-      />
-    );
+  if (posts && posts.length < 1) {
+    if (isOwnUser) {
+      return (
+        <EmptySection
+          logo={<BsCamera />}
+          title="Share Photos"
+          desc="When you share photos, they will appear on you profile"
+        />
+      );
+    } else {
+      return <EmptySection logo={<BsCamera />} title="No Posts yet" desc="" />;
+    }
+  }
 
   console.log({ posts });
 

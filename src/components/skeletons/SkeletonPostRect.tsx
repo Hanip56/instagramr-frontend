@@ -1,5 +1,3 @@
-import React from "react";
-
 const SkeletonPostRect = () => {
   return (
     <div className="relative bg-grayIg/30 dark:bg-grayIg w-full h-0 pb-[100%] group cursor-pointer animate-pulse">

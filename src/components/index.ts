@@ -25,6 +25,9 @@ export { default as SkeletonPostRect } from "./skeletons/SkeletonPostRect";
 export { default as ModalCardOptions } from "./Modals/ModalCardOptions";
 export { default as ModalPost } from "./Modals/ModalPost";
 export { default as ModalCreate } from "./Modals/ModalCreate";
+export { default as ModalGearProfile } from "./Modals/ModalGearProfile";
+export { default as ModalFollowers } from "./Modals/ModalFollowers";
+export { default as ModalChangeProfilePicture } from "./Modals/ModalChangeProfilePicture";
 
 // UI
 export { default as Spinner } from "./UI/Spinner";
