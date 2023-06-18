@@ -27,6 +27,7 @@ export { default as ModalPost } from "./Modals/ModalPost";
 export { default as ModalCreate } from "./Modals/ModalCreate";
 export { default as ModalGearProfile } from "./Modals/ModalGearProfile";
 export { default as ModalFollowers } from "./Modals/ModalFollowers";
+export { default as ModalFollowings } from "./Modals/ModalFollowings";
 export { default as ModalChangeProfilePicture } from "./Modals/ModalChangeProfilePicture";
 
 // UI

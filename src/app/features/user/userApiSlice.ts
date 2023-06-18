@@ -1,5 +1,6 @@
 import { UserShortType, UserType } from "../../../../types";
 import apiSlice from "../../api/api";
+import { store } from "../../store";
 
 type FindUserType = {
   followers: string[];
@@ -22,19 +23,37 @@ const userApiSlice = apiSlice.injectEndpoints({
       },
     }),
     getSingleUser: builder.query<UserType, string>({
-      query: (username) => `/api/user/${username}`,
+      query: (slug) => `/api/user/${slug}`,
+      providesTags: (result, err, arg) =>
+        result
+          ? [{ type: "SingleUser", id: result._id }]
+          : [{ type: "SingleUser", id: "SINGLE" }],
+    }),
+    getFollowers: builder.query<UserShortType[], string>({
+      query: (slug) => `/api/user/${slug}/followers`,
+    }),
+    getFollowings: builder.query<UserShortType[], string>({
+      query: (slug) => `/api/user/${slug}/followings`,
     }),
     followUser: builder.mutation({
       query: ({ targetId }) => ({
         url: `/api/user/${targetId}/follow`,
         method: "PATCH",
       }),
+      invalidatesTags: (result, err, arg) => [
+        { type: "SingleUser", id: store.getState().auth.user?._id },
+        { type: "SingleUser", id: arg.targetId },
+      ],
     }),
     unfollowUser: builder.mutation({
       query: ({ targetId }) => ({
         url: `/api/user/${targetId}/unfollow`,
         method: "PATCH",
       }),
+      invalidatesTags: (result, err, arg) => [
+        { type: "SingleUser", id: store.getState().auth.user?._id },
+        { type: "SingleUser", id: arg.targetId },
+      ],
     }),
     editProfile: builder.mutation<UserType, EditUserType>({
       query: (userData) => ({
@@ -49,12 +68,18 @@ const userApiSlice = apiSlice.injectEndpoints({
         method: "PUT",
         body: formData,
       }),
+      invalidatesTags: [
+        { type: "SingleUser", id: store.getState().auth.user?._id },
+      ],
     }),
     removeProfilePicture: builder.mutation({
       query: () => ({
         url: "/api/user/edit/profilePicture",
         method: "DELETE",
       }),
+      invalidatesTags: [
+        { type: "SingleUser", id: store.getState().auth.user?._id },
+      ],
     }),
   }),
 });
@@ -62,6 +87,8 @@ const userApiSlice = apiSlice.injectEndpoints({
 export const {
   useFindUserQuery,
   useGetSingleUserQuery,
+  useGetFollowersQuery,
+  useGetFollowingsQuery,
   useFollowUserMutation,
   useUnfollowUserMutation,
   useEditProfileMutation,

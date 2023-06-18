@@ -3,7 +3,7 @@ import { BsXLg } from "react-icons/bs";
 import { BASE_URL } from "../../constants";
 import {
   useFollowUserMutation,
-  useGetFollowersQuery,
+  useGetFollowingsQuery,
   useUnfollowUserMutation,
 } from "../../app/features/user/userApiSlice";
 import { Spinner } from "..";
@@ -21,9 +21,9 @@ type PropTypes = {
   slug: string;
 };
 
-const ModalFollowers = ({ hide, slug }: PropTypes) => {
+const ModalFollowings = ({ hide, slug }: PropTypes) => {
   const user = useSelector(selectCurrentUser) as UserType;
-  const { data: followers, isLoading } = useGetFollowersQuery(slug);
+  const { data: followings, isLoading } = useGetFollowingsQuery(slug);
   const dispatch = useDispatch();
 
   const [follow] = useFollowUserMutation();
@@ -59,8 +59,6 @@ const ModalFollowers = ({ hide, slug }: PropTypes) => {
     }
   };
 
-  console.log(followers);
-
   return (
     <>
       <div
@@ -72,7 +70,7 @@ const ModalFollowers = ({ hide, slug }: PropTypes) => {
         <div className="w-[80vw] xs:w-[25rem] bg-white dark:bg-grayIg rounded-lg overflow-hidden flex flex-col divide-y-[1px] divide-darkBg/10 dark:divide-white/10 text-sm animate-fadeIn text-lightText dark:text-darkText">
           <header className="flex items-center justify-between text-center p-3 px-4 font-semibold">
             <span className="basis-4"></span>
-            <span>Followers</span>
+            <span>Followings</span>
             <button onClick={hide} className="text-xl basis-4">
               <BsXLg />
             </button>
@@ -80,46 +78,47 @@ const ModalFollowers = ({ hide, slug }: PropTypes) => {
           <main className="basis-80 overflow-y-scroll">
             {isLoading && <Spinner />}
             {!isLoading &&
-              followers?.map((follower) => (
+              followings?.map((following) => (
                 <div
-                  key={follower._id}
+                  key={following._id}
                   className="w-full flex-shrink-0 flex gap-4 px-6 py-2 items-center gap-y-1"
                 >
                   <Link
-                    to={`/${follower.slug}`}
+                    to={`/${following.slug}`}
                     onClick={hide}
                     className="flex gap-4 items-center"
                   >
                     <div className="w-12 h-12 border border-white rounded-full flex justify-center items-center">
                       <div className="w-[95%] h-[95%] rounded-full overflow-hidden bg-gray-300">
                         <img
-                          src={`${BASE_URL}/${follower.profilePicture}`}
-                          alt={follower.slug}
+                          src={`${BASE_URL}/${following.profilePicture}`}
+                          alt={following.slug}
                           className="w-full h-full object-cover"
                         />
                       </div>
                     </div>
                     <div>
                       <p className="text-sm font-semibold">
-                        {follower.username}
+                        {following.username}
                       </p>
                       <p className="text-xs tracking-widest text-gray-400">
-                        <span>{follower?.fullname}</span>
+                        <span>{following?.fullname}</span>
                       </p>
                     </div>
                   </Link>
-                  {follower._id !== user._id && (
+                  {following._id !== user._id && (
                     <>
-                      {follower._id !== user._id && isFollowed(follower._id) ? (
+                      {following._id !== user._id &&
+                      isFollowed(following._id) ? (
                         <button
-                          onClick={() => handleUnfollow(follower._id)}
+                          onClick={() => handleUnfollow(following._id)}
                           className="igButton ml-auto"
                         >
                           Unfollow
                         </button>
                       ) : (
                         <button
-                          onClick={() => handleFollow(follower._id)}
+                          onClick={() => handleFollow(following._id)}
                           className="igButtonBlue ml-auto"
                         >
                           Follow
@@ -136,4 +135,4 @@ const ModalFollowers = ({ hide, slug }: PropTypes) => {
   );
 };
 
-export default ModalFollowers;
+export default ModalFollowings;

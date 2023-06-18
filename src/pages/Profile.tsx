@@ -7,25 +7,31 @@ import { selectCurrentUser } from "../app/features/auth/authSlice";
 import { UserType } from "../../types";
 import { BASE_URL } from "../constants";
 import { useGetSingleUserQuery } from "../app/features/user/userApiSlice";
-import { Footer, ModalFollowers, ModalGearProfile } from "../components";
+import {
+  Footer,
+  ModalFollowers,
+  ModalFollowings,
+  ModalGearProfile,
+} from "../components";
 import { useState } from "react";
 
 const Profile = () => {
   const [showModalGearProfile, setShowModalGearProfile] = useState(false);
   const [showModalFollowers, setShowModalFollowers] = useState(false);
+  const [showModalFollowings, setShowModalFollowings] = useState(false);
   const location = useLocation();
   const user = useSelector(selectCurrentUser) as UserType;
 
-  const currentUsername = location.pathname.split("/")[1];
+  const currentSlug = location.pathname.split("/")[1];
   const section = location.pathname.split("/")[2];
 
-  const { data: shownUser, isLoading } = useGetSingleUserQuery(currentUsername);
+  const { data: shownUser, isLoading } = useGetSingleUserQuery(currentSlug);
 
   if (isLoading) {
     return <p>Loading...</p>;
   }
 
-  const isOwnUser = user.username === currentUsername;
+  const isOwnUser = user.slug === currentSlug;
 
   const profileButtonsContainer = () => {
     if (isOwnUser) {
@@ -57,7 +63,16 @@ const Profile = () => {
         <ModalGearProfile hide={() => setShowModalGearProfile(false)} />
       )}
       {showModalFollowers && (
-        <ModalFollowers hide={() => setShowModalFollowers(false)} />
+        <ModalFollowers
+          hide={() => setShowModalFollowers(false)}
+          slug={shownUser?.slug ?? ""}
+        />
+      )}
+      {showModalFollowings && (
+        <ModalFollowings
+          hide={() => setShowModalFollowings(false)}
+          slug={shownUser?.slug ?? ""}
+        />
       )}
 
       <div className="max-w-[1013px] px-0 md:px-4 mx-auto flex flex-col pt-6">
@@ -75,7 +90,7 @@ const Profile = () => {
               </div>
             </div>
 
-            <div className="md:block flex-1 space-y-4 md:space-y-7">
+            <div className="md:block flex-1 space-y-4 md:space-y-7 md:pt-6">
               <div className="flex items-center gap-6">
                 {/* username */}
                 <span>{shownUser?.username}</span>
@@ -109,7 +124,10 @@ const Profile = () => {
                   <span className="font-bold">{shownUser?.totalFollowers}</span>{" "}
                   <span>followers</span>
                 </li>
-                <li>
+                <li
+                  className="cursor-pointer"
+                  onClick={() => setShowModalFollowings(true)}
+                >
                   <span className="font-bold">
                     {shownUser?.totalFollowings}
                   </span>{" "}
@@ -119,7 +137,9 @@ const Profile = () => {
               {/* buttons container for mobile screen */}
               <div className="block md:hidden">{profileButtonsContainer()}</div>
               {/* bio */}
-              <div className="hidden md:block">
+              <div className="hidden md:block text-sm leading-6">
+                <b>{shownUser?.fullname}</b>
+                <br />
                 <p>{shownUser?.profileBio}</p>
               </div>
             </div>

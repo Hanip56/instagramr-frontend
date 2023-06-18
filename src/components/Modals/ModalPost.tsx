@@ -79,6 +79,7 @@ const ModalPost = () => {
         _id: user?._id,
         username: user?.username,
         profilePicture: user?.profilePicture,
+        slug: user?.slug,
       },
     });
   };
@@ -230,7 +231,7 @@ const ModalPost = () => {
                   <div className="space-y-4 mt-6 max-h-[26rem] overflow-y-auto">
                     {currentPost?.comments?.map((comment: any) => (
                       <div className="flex gap-x-4" key={comment._id}>
-                        <Link to={`/${comment?.user?.username}`}>
+                        <Link to={`/${comment?.user?.slug}`}>
                           <div className="w-8 h-8 rounded-full overflow-hidden">
                             <img
                               src={`${BASE_URL}/${currentPost?.postedBy?.profilePicture}`}
@@ -240,7 +241,7 @@ const ModalPost = () => {
                         </Link>
                         <div>
                           <p>
-                            <Link to={`/${comment?.user?.username}`}>
+                            <Link to={`/${comment?.user?.slug}`}>
                               <span className="font-semibold">
                                 {comment?.user?.username}
                               </span>{" "}

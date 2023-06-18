@@ -40,7 +40,7 @@ const SearchNavbar = forwardRef<HTMLDivElement, PropTypes>(
         <div className="overflow-y-scroll flex flex-col flex-1 border border-transparent border-t-grayIg/10 dark:border-t-gray-200/20 py-2">
           {searchedUsers?.map((user) => (
             <Link
-              to={`/${user.username}`}
+              to={`/${user.slug}`}
               key={user._id}
               onClick={handleCloseSearchBar}
             >
