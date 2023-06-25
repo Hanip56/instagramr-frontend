@@ -5,18 +5,14 @@ import {
   IoChatbubbleOutline,
   IoPaperPlaneOutline,
   IoBookmarkOutline,
-  IoBookmarkSharp,
   IoBookmark,
 } from "react-icons/io5";
 import { BsThreeDots } from "react-icons/bs";
 import { VscSmiley } from "react-icons/vsc";
-import { Link } from "react-router-dom";
 import { get_time_diff } from "../../utils/getTimeDiff";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import useOutsideAlerter from "../../utils/ClickOutside";
-// import { BASE_URL } from "../../constants";
-import { postData as post } from "../../dummyData";
 import { useDispatch, useSelector } from "react-redux";
 import {
   showModalCardOptions,
@@ -37,7 +33,7 @@ type PropTypes = {
 };
 
 const Card = ({ post }: PropTypes) => {
-  const [imgLoaded, setImgLoaded] = useState(false);
+  const [contentLoaded, setContentLoaded] = useState(false);
   const [comment, setComment] = useState("");
   const [showEmojiBox, setShowEmojiBox] = useState(false);
   const user = useSelector(selectCurrentUser) as UserType;
@@ -64,6 +60,7 @@ const Card = ({ post }: PropTypes) => {
         _id: user?._id,
         username: user?.username,
         profilePicture: user?.profilePicture,
+        slug: user?.slug,
       },
     });
   };
@@ -136,18 +133,32 @@ const Card = ({ post }: PropTypes) => {
         </div>
       </header>
       <main>
-        {!imgLoaded && (
+        {!contentLoaded && post.contentType === "image" && (
           <div className="w-full h-[calc(30rem-58px)]">
             <SkeletonPostRect />
           </div>
         )}
-        <div className="w-full max-h-[30rem] overflow-hidden">
-          <img
-            src={`${BASE_URL}/${post?.content[0]}`}
-            alt="post img"
-            className="object-contain w-full h-full object-center"
-            onLoad={() => setImgLoaded(true)}
-          />
+        <div className="w-full max-h-[35rem] overflow-hidden">
+          {post.contentType !== "video" && (
+            <img
+              src={`${BASE_URL}/${post?.content[0]}`}
+              alt="post img"
+              className="object-contain w-full h-full object-center"
+              onLoad={() => setContentLoaded(true)}
+            />
+          )}
+          {post.contentType === "video" && (
+            <div className="w-full h-[35rem] bg-black">
+              <video
+                src={`${BASE_URL}/${post?.content[0]}`}
+                autoPlay
+                muted
+                className="w-full h-full object-contain object-center"
+                loop
+                onLoad={() => setContentLoaded(true)}
+              />
+            </div>
+          )}
         </div>
         <div className="flex items-center justify-between text-2xl">
           <div className="flex items-center gap-x-4 py-3">

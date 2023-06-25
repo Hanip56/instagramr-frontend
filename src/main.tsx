@@ -2,7 +2,7 @@ import ReactDOM from "react-dom/client";
 
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Edit, Explore, Home, Messages, Profile, Reels } from "./pages";
+import { Edit, Explore, Home, Messages, Profile, Reels, Saved } from "./pages";
 import { Provider } from "react-redux";
 import { store } from "./app/store.ts";
 import {
@@ -64,6 +64,10 @@ const router = createBrowserRouter([
                 element: <TaggedSection />,
               },
             ],
+          },
+          {
+            path: "/:username/saved/:collection",
+            element: <Saved />,
           },
           {
             path: "accounts/edit",

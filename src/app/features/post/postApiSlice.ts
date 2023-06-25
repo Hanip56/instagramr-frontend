@@ -44,6 +44,11 @@ type AddCommentArg = {
   comment: string;
 };
 
+type GetSavedPostArg = {
+  pageNumber: number;
+  limit?: number;
+};
+
 const postApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     createPost: builder.mutation({
@@ -78,6 +83,37 @@ const postApiSlice = apiSlice.injectEndpoints({
       // Refetch when the page arg changes
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg;
+      },
+    }),
+    getThumbnailSaved: builder.query<ExplorePostsState, void>({
+      query: () => `/api/post/saved?page=${1}&limit=${4}`,
+    }),
+    getSavedPost: builder.query<ExplorePostsState, GetSavedPostArg>({
+      query: ({ pageNumber, limit }) =>
+        `/api/post/saved?page=${pageNumber}&limit=${limit}`,
+      providesTags: (result, error, arg) =>
+        result
+          ? [
+              { type: "SavedPost", id: "LIST" },
+              ...result.posts.map((post) => ({
+                type: "SavedPost" as const,
+                id: post._id,
+              })),
+            ]
+          : [{ type: "SavedPost", id: "LIST" }],
+      // Only have one cache entry because the arg always maps to one string
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName;
+      },
+      // Always merge incoming data to the cache entry
+      merge: (currentCache, newItems) => {
+        const { posts } = newItems;
+        currentCache.posts.push(...posts);
+      },
+      // Refetch when the page arg changes
+      forceRefetch({ currentArg, previousArg }) {
+        console.log({ currentArg, previousArg });
+        return currentArg?.pageNumber !== previousArg?.pageNumber;
       },
     }),
     getSinglePost: builder.query<PostType, string>({
@@ -234,6 +270,8 @@ const postApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetExplorePostQuery,
+  useGetThumbnailSavedQuery,
+  useGetSavedPostQuery,
   useCreatePostMutation,
   useGetSinglePostQuery,
   useGetFollowingPostQuery,

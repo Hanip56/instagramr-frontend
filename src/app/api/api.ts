@@ -42,7 +42,13 @@ const baseQueryWithReauth: BaseQueryFn = async (args, api, extraOptions) => {
 const apiSlice = createApi({
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({}),
-  tagTypes: ["ExplorePost", "SinglePost", "FollowingPost", "SingleUser"],
+  tagTypes: [
+    "ExplorePost",
+    "SinglePost",
+    "FollowingPost",
+    "SavedPost",
+    "SingleUser",
+  ],
 });
 
 export default apiSlice;

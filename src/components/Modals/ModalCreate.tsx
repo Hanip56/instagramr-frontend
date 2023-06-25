@@ -8,7 +8,8 @@ import { Spinner } from "..";
 
 const ModalCreate = () => {
   const [caption, setCaption] = useState("");
-  const [postImage, setPostImage] = useState<File>();
+  const [postFile, setPostFile] = useState<File>();
+  const [postFileType, setPostFileType] = useState("");
   const dispatch = useDispatch();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -33,18 +34,61 @@ const ModalCreate = () => {
     e.preventDefault();
 
     console.log({
-      contentType: postImage?.type,
-      content: postImage,
+      contentType: postFile?.type,
+      content: postFile,
       caption,
     });
 
     const formdata = new FormData();
 
     formdata.append("contentType", "string");
-    formdata.append("contents", postImage as File);
+    formdata.append("contents", postFile as File);
     formdata.append("caption", caption);
 
     await createPost(formdata);
+  };
+
+  console.log({ postFile });
+
+  const handleInputFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files !== null) {
+      setPostFile(e?.target?.files[0]);
+      switch (e.target.files[0].type) {
+        case "image/jpeg":
+          setPostFileType("image");
+          break;
+        case "image/png":
+          setPostFileType("image");
+          break;
+        case "video/mp4":
+          setPostFileType("video");
+          break;
+        default:
+          break;
+      }
+    }
+  };
+
+  const previewElement = () => {
+    if (postFileType === "image") {
+      return (
+        <img
+          src={URL.createObjectURL(postFile!)}
+          alt=""
+          className="w-full h-full object-contain object-center"
+        ></img>
+      );
+    } else if (postFileType === "video") {
+      return (
+        <video
+          src={URL.createObjectURL(postFile!)}
+          autoPlay
+          muted
+          loop
+          className="w-full h-full object-contain object-center"
+        ></video>
+      );
+    }
   };
 
   return (
@@ -74,12 +118,8 @@ const ModalCreate = () => {
             <div className="flex flex-col md:flex-row h-[30rem]">
               <div className="flex-1 md:basis-[65%] h-2 md:h-full bg-lightBg dark:bg-grayIg flex justify-center items-center">
                 {/* input file */}
-                {postImage ? (
-                  <img
-                    src={URL.createObjectURL(postImage)}
-                    alt=""
-                    className="w-full h-full object-contain object-center"
-                  ></img>
+                {postFile ? (
+                  previewElement()
                 ) : (
                   <>
                     <button
@@ -95,10 +135,7 @@ const ModalCreate = () => {
                       id="file"
                       ref={inputRef}
                       className="hidden"
-                      onChange={(e) => {
-                        e.target.files !== null &&
-                          setPostImage(e?.target?.files[0]);
-                      }}
+                      onChange={handleInputFile}
                     />
                   </>
                 )}
