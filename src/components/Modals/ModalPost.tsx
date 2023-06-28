@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 import { BsThreeDots } from "react-icons/bs";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-import useOutsideAlerter from "../../utils/ClickOutside";
+import useOutsideAlerter from "../../hooks/useOutsideAlerter";
 import { get_time_diff } from "../../utils/getTimeDiff";
 import { BASE_URL } from "../../constants";
 

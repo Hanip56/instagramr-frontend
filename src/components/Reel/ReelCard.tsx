@@ -31,7 +31,7 @@ import {
   useUnfollowUserMutation,
 } from "../../app/features/user/userApiSlice";
 import { ReelCommentCard } from "..";
-import useOutsideAlerter from "../../hooks/useOutsideAlerter";
+import useOutsideAlerterDoubleRef from "../../hooks/useOutsideAlerterDoubleRef";
 import { showModalCardOptions } from "../../app/features/modal/modalSlice";
 
 type PropTypes = {
@@ -138,7 +138,11 @@ const ReelCard = forwardRef<HTMLVideoElement[], PropTypes>(
     const buttonCommentRef = useRef<HTMLDivElement>(null);
     const commentContainerRef = useRef<HTMLDivElement>(null);
 
-    useOutsideAlerter(commentContainerRef, setShowComment, buttonCommentRef);
+    useOutsideAlerterDoubleRef(
+      commentContainerRef,
+      setShowComment,
+      buttonCommentRef
+    );
 
     return (
       <div

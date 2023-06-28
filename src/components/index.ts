@@ -10,6 +10,7 @@ export { default as NotifNavbar } from "./Navbar/NotifNavbar";
 // Home
 export { default as StatusUser } from "./Home/StatusUser";
 export { default as Card } from "./Home/Card";
+export { default as TopBar } from "./Home/TopBar";
 
 // Reel
 export { default as ReelCard } from "./Reel/ReelCard";

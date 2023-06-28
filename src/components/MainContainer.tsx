@@ -1,8 +1,9 @@
 import { useSelector } from "react-redux";
-import { ModalCardOptions, ModalCreate, ModalPost, SkeletonModalPost } from ".";
+import { ModalCardOptions, ModalCreate, ModalPost } from ".";
 import Navbar from "./Navbar";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { RootState } from "../app/store";
+import usePreventScroll from "../hooks/usePreventScroll";
 
 const MainContainer = () => {
   const { modalCardOptions, modalPost, modalCreate } = useSelector(
@@ -11,6 +12,8 @@ const MainContainer = () => {
   const { token } = useSelector((state: RootState) => state.auth);
 
   const location = useLocation();
+
+  usePreventScroll([modalCardOptions, modalPost, modalCreate]);
 
   if (!token) {
     console.log({ token });

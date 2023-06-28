@@ -7,12 +7,12 @@ import {
   IoBookmarkOutline,
   IoBookmark,
 } from "react-icons/io5";
-import { BsPlay, BsPlayFill, BsThreeDots } from "react-icons/bs";
+import { BsPlayFill, BsThreeDots } from "react-icons/bs";
 import { VscSmiley } from "react-icons/vsc";
 import { get_time_diff } from "../../utils/getTimeDiff";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-import useOutsideAlerter from "../../utils/ClickOutside";
+import useOutsideAlerter from "../../hooks/useOutsideAlerter";
 import { useDispatch, useSelector } from "react-redux";
 import {
   showModalCardOptions,
@@ -36,6 +36,7 @@ const Card = ({ post }: PropTypes) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isVideoPlay, setIsVideoPlay] = useState(false);
   const [contentLoaded, setContentLoaded] = useState(false);
+  const [commentsTemp, setCommentsTemp] = useState([...post.comments]);
   const [comment, setComment] = useState("");
   const [showEmojiBox, setShowEmojiBox] = useState(false);
   const user = useSelector(selectCurrentUser) as UserType;
@@ -51,7 +52,7 @@ const Card = ({ post }: PropTypes) => {
   const liked = post?.likes.some((u) => u._id === user._id);
   const saved = post?.savedBy.some((u) => u === user._id);
 
-  const isCommented = post?.comments.filter((u) => u.user._id === user._id);
+  const isCommented = commentsTemp.filter((u) => u.user._id === user._id);
   const latestComment = isCommented.slice(-2);
 
   const handleLoves = async () => {
@@ -83,6 +84,7 @@ const Card = ({ post }: PropTypes) => {
 
     if ("data" in resComment) {
       setComment("");
+      setCommentsTemp((prev) => [...prev, resComment.data.data]);
     }
   };
 
@@ -152,7 +154,7 @@ const Card = ({ post }: PropTypes) => {
   return (
     <div className="w-[100%]  mx-auto rounded-md bg-lightBg dark:bg-darkBg">
       <header className="w-full h-14 flex justify-between items-center px-2">
-        <div className="flex items-center gap-x-4">
+        <div className="flex items-center gap-x-3">
           <div
             className={`w-10 h-10 rounded-full border border-white flex justify-center items-center`}
           >
@@ -241,7 +243,7 @@ const Card = ({ post }: PropTypes) => {
             <span className="font-semibold">{post?.postedBy?.username}</span>{" "}
             <span className="font-light">{post?.caption}</span>
           </p>
-          {post?.comments?.length > 0 && (
+          {commentsTemp?.length > 0 && (
             <p
               className="text-xs my-1 text-gray-400 cursor-pointer"
               onClick={handleShowModal}
@@ -264,7 +266,7 @@ const Card = ({ post }: PropTypes) => {
           </p>
         </div>
       </main>
-      <footer className="flex justify-between py-2 text-xs">
+      <footer className="flex justify-between py-2 text-xs text-lightText dark:text-darkText">
         <form
           onSubmit={handleSubmitComment}
           className="relative w-full flex gap-x-2"
@@ -302,7 +304,7 @@ const Card = ({ post }: PropTypes) => {
             type="button"
             onClick={() => setShowEmojiBox((prev) => !prev)}
           >
-            <VscSmiley className="text-lg text-white/50 hover:text-white/40" />
+            <VscSmiley className="text-lg text-black/50 hover:text-black/40 dark:text-white/50 dark:hover:text-white/40" />
           </button>
         </form>
       </footer>

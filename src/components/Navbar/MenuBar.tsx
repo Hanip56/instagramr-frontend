@@ -1,7 +1,7 @@
 import { HiBars3 } from "react-icons/hi2";
 import { TbMessageReport, TbMoon, TbSettings } from "react-icons/tb";
 import { useState, createRef, useEffect } from "react";
-import useOutsideAlerter from "../../hooks/useOutsideAlerter";
+import useOutsideAlerterDoubleRef from "../../hooks/useOutsideAlerterDoubleRef";
 import { FiChevronLeft } from "react-icons/fi";
 import { BiTagAlt } from "react-icons/bi";
 import { AiOutlineFieldTime } from "react-icons/ai";
@@ -28,7 +28,7 @@ const MenuBar = ({ alternateBar }: PropTypes) => {
 
   const [logout] = useLogoutMutation();
 
-  useOutsideAlerter(barRef, setShowBar, moreBtnRef);
+  useOutsideAlerterDoubleRef(barRef, setShowBar, moreBtnRef);
 
   const handleToggleMode = () => {
     dispatch(toggleMode());

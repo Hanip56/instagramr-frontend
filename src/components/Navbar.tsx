@@ -23,7 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { showModalCreate } from "../app/features/modal/modalSlice";
 import { selectCurrentUser } from "../app/features/auth/authSlice";
 import { BASE_URL } from "../constants";
-import useOutsideAlerter from "../hooks/useOutsideAlerter";
+import useOutsideAlerterDoubleRef from "../hooks/useOutsideAlerterDoubleRef";
 
 const Navbar = () => {
   const [searchBar, setSearchBar] = useState(false);
@@ -47,8 +47,8 @@ const Navbar = () => {
     dispatch(showModalCreate());
   };
 
-  useOutsideAlerter(navRef, setSearchBar, searchNavRef);
-  useOutsideAlerter(navRef, setNotifBar, searchNotifRef);
+  useOutsideAlerterDoubleRef(navRef, setSearchBar, searchNavRef);
+  useOutsideAlerterDoubleRef(navRef, setNotifBar, searchNotifRef);
 
   return (
     <>
@@ -217,7 +217,7 @@ const Navbar = () => {
             </span>
           </li>
           <NavLink
-            to={`/${user?.username}`}
+            to={`/${user?.slug}`}
             className="navList"
             onClick={handleCloseAlternateBar}
           >
