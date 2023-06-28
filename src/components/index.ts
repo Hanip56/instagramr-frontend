@@ -11,6 +11,10 @@ export { default as NotifNavbar } from "./Navbar/NotifNavbar";
 export { default as StatusUser } from "./Home/StatusUser";
 export { default as Card } from "./Home/Card";
 
+// Reel
+export { default as ReelCard } from "./Reel/ReelCard";
+export { default as ReelCommentCard } from "./Reel/ReelCommentCard";
+
 // Profile
 export { default as PostsSection } from "./Profile/PostsSection";
 export { default as SavedSection } from "./Profile/SavedSection";

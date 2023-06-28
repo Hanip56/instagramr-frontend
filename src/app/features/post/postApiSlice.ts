@@ -32,6 +32,7 @@ type SaveAndUnsaveArg = {
 
 type AddCommentResponse = {
   data: {
+    _id: string;
     postId: string;
     user: UserShortType;
     comment: string;
@@ -85,6 +86,33 @@ const postApiSlice = apiSlice.injectEndpoints({
         return currentArg !== previousArg;
       },
     }),
+    getReelPost: builder.query<ExplorePostsState, number>({
+      query: (pageNumber) => `/api/post?page=${pageNumber}&type=video`,
+      keepUnusedDataFor: Infinity,
+      providesTags: (result, error, arg) =>
+        result
+          ? [
+              { type: "ReelPost", id: "LIST" },
+              ...result.posts.map((post) => ({
+                type: "ReelPost" as const,
+                id: post._id,
+              })),
+            ]
+          : [{ type: "ReelPost", id: "LIST" }],
+      // Only have one cache entry because the arg always maps to one string
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName;
+      },
+      // Always merge incoming data to the cache entry
+      merge: (currentCache, newItems) => {
+        const { posts } = newItems;
+        currentCache.posts.push(...posts);
+      },
+      // Refetch when the page arg changes
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
+      },
+    }),
     getThumbnailSaved: builder.query<ExplorePostsState, void>({
       query: () => `/api/post/saved?page=${1}&limit=${4}`,
     }),
@@ -112,7 +140,6 @@ const postApiSlice = apiSlice.injectEndpoints({
       },
       // Refetch when the page arg changes
       forceRefetch({ currentArg, previousArg }) {
-        console.log({ currentArg, previousArg });
         return currentArg?.pageNumber !== previousArg?.pageNumber;
       },
     }),
@@ -191,12 +218,31 @@ const postApiSlice = apiSlice.injectEndpoints({
             }
           )
         );
+        const patchResult3 = dispatch(
+          postApiSlice.util.updateQueryData(
+            "getReelPost",
+            pageNumber ?? 1,
+            (draft) => {
+              const post = draft.posts.find((post) => post._id === postId);
+              const liked = post?.likes.some((u) => u._id === user._id);
+
+              if (post) {
+                if (liked) {
+                  post.likes = post.likes.filter((u) => u._id !== user._id);
+                } else {
+                  post.likes.push(user);
+                }
+              }
+            }
+          )
+        );
 
         try {
           await queryFulfilled;
         } catch (error) {
           patchResult.undo();
           patchResult2.undo();
+          patchResult3.undo();
         }
       },
     }),
@@ -245,12 +291,31 @@ const postApiSlice = apiSlice.injectEndpoints({
             }
           )
         );
+        const patchResult3 = dispatch(
+          postApiSlice.util.updateQueryData(
+            "getReelPost",
+            pageNumber ?? 1,
+            (draft) => {
+              const post = draft.posts.find((post) => post._id === postId);
+              const saved = post?.savedBy.some((u) => u === userId);
+
+              if (post) {
+                if (saved) {
+                  post.savedBy = post.savedBy.filter((u) => u !== userId);
+                } else {
+                  post.savedBy.push(userId);
+                }
+              }
+            }
+          )
+        );
 
         try {
           await queryFulfilled;
         } catch (error) {
           patchResult.undo();
           patchResult2.undo();
+          patchResult3.undo();
         }
       },
     }),
@@ -261,8 +326,7 @@ const postApiSlice = apiSlice.injectEndpoints({
         body: { comment },
       }),
       invalidatesTags: (result, err, arg) => [
-        { type: "SinglePost", id: arg.postId },
-        { type: "FollowingPost", id: arg.postId },
+        { type: "SinglePost", id: result?.data.postId },
       ],
     }),
   }),
@@ -270,6 +334,7 @@ const postApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetExplorePostQuery,
+  useGetReelPostQuery,
   useGetThumbnailSavedQuery,
   useGetSavedPostQuery,
   useCreatePostMutation,

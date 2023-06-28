@@ -9,6 +9,7 @@ const useOutsideAlerter = (
     function handleClickOutside(event: MouseEvent) {
       if (
         ref.current &&
+        triggerRef.current &&
         !ref.current.contains(event.target as Node) &&
         !triggerRef.current?.contains(event.target as Node)
       ) {

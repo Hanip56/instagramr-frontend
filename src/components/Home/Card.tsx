@@ -1,4 +1,4 @@
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import {
   IoHeartOutline,
   IoHeartSharp,
@@ -7,7 +7,7 @@ import {
   IoBookmarkOutline,
   IoBookmark,
 } from "react-icons/io5";
-import { BsThreeDots } from "react-icons/bs";
+import { BsPlay, BsPlayFill, BsThreeDots } from "react-icons/bs";
 import { VscSmiley } from "react-icons/vsc";
 import { get_time_diff } from "../../utils/getTimeDiff";
 import data from "@emoji-mart/data";
@@ -33,6 +33,8 @@ type PropTypes = {
 };
 
 const Card = ({ post }: PropTypes) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [isVideoPlay, setIsVideoPlay] = useState(false);
   const [contentLoaded, setContentLoaded] = useState(false);
   const [comment, setComment] = useState("");
   const [showEmojiBox, setShowEmojiBox] = useState(false);
@@ -43,11 +45,11 @@ const Card = ({ post }: PropTypes) => {
   const [likeAndUnlike] = useLikeAndUnlikeMutation();
   const [saveAndUnsave] = useSaveAndUnsaveMutation();
   const [addComment] = useAddCommentMutation();
+  const contentRef = useRef<HTMLDivElement>(null);
+  const vidRef = useRef<HTMLVideoElement>(null);
 
   const liked = post?.likes.some((u) => u._id === user._id);
   const saved = post?.savedBy.some((u) => u === user._id);
-
-  console.log({ postCard: post });
 
   const isCommented = post?.comments.filter((u) => u.user._id === user._id);
   const latestComment = isCommented.slice(-2);
@@ -105,6 +107,48 @@ const Card = ({ post }: PropTypes) => {
 
   useOutsideAlerter(emojiBoxRef, setShowEmojiBox);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.5 }
+    );
+
+    if (contentRef.current) {
+      observer.observe(contentRef.current);
+    }
+
+    return () => {
+      if (contentRef.current) {
+        observer.unobserve(contentRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (vidRef.current) {
+      if (isVisible) {
+        vidRef.current.play();
+      } else {
+        vidRef.current.pause();
+      }
+    }
+  }, [isVisible]);
+
+  const handlePlay = () => {
+    console.log("clicked");
+    setIsVideoPlay((prev) => {
+      if (prev) {
+        vidRef.current?.pause();
+        return false;
+      } else {
+        vidRef.current?.play();
+        return true;
+      }
+    });
+  };
+
   return (
     <div className="w-[100%]  mx-auto rounded-md bg-lightBg dark:bg-darkBg">
       <header className="w-full h-14 flex justify-between items-center px-2">
@@ -148,13 +192,24 @@ const Card = ({ post }: PropTypes) => {
             />
           )}
           {post.contentType === "video" && (
-            <div className="w-full h-[35rem] bg-black">
+            <div
+              className="relative w-full h-[35rem] bg-black cursor-pointer"
+              ref={contentRef}
+            >
+              {!isVideoPlay && (
+                <button className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 text-8xl text-lightBg">
+                  <BsPlayFill />
+                </button>
+              )}
               <video
                 src={`${BASE_URL}/${post?.content[0]}`}
-                autoPlay
                 muted
                 className="w-full h-full object-contain object-center"
                 loop
+                ref={vidRef}
+                onClick={handlePlay}
+                onPlay={() => setIsVideoPlay(true)}
+                onPause={() => setIsVideoPlay(false)}
                 onLoad={() => setContentLoaded(true)}
               />
             </div>

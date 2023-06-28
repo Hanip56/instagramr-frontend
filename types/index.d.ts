@@ -34,7 +34,7 @@ export type PostType = {
   content: string[];
   postedBy: UserShortType;
   likes: UserShortType[];
-  comments: [{ user: UserShortType; comment: string }];
+  comments: [{ _id: string; user: UserShortType; comment: string }];
   totalLikes?: number;
   totalComments?: number;
   savedBy: string[];

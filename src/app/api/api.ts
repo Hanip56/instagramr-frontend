@@ -48,6 +48,7 @@ const apiSlice = createApi({
     "FollowingPost",
     "SavedPost",
     "SingleUser",
+    "ReelPost",
   ],
 });
 
