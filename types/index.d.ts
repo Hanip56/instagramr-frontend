@@ -32,6 +32,7 @@ export type PostType = {
   contentType?: string;
   caption?: string;
   content: string[];
+  thumbnail: string;
   postedBy: UserShortType;
   likes: UserShortType[];
   comments: [{ _id: string; user: UserShortType; comment: string }];

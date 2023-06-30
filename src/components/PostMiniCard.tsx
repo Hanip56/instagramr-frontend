@@ -36,7 +36,7 @@ const PostMiniCard = ({ post }: PropTypes) => {
         </div>
       </div>
       <img
-        src={`${BASE_URL}/${post?.content[0]}`}
+        src={`${BASE_URL}/thumbnail/${post?.thumbnail}`}
         alt={`thumbnail`}
         className="absolute top-0 left-0 w-full h-full object-cover"
       />
