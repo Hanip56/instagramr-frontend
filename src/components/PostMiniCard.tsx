@@ -12,7 +12,7 @@ const PostMiniCard = ({ post }: PropTypes) => {
   const dispatch = useDispatch();
 
   const handleOpenModal = () => {
-    dispatch(showModalPost(post._id));
+    dispatch(showModalPost({ postId: post._id }));
   };
 
   return (

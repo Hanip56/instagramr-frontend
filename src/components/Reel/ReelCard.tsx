@@ -33,6 +33,7 @@ import {
 import { ReelCommentCard } from "..";
 import useOutsideAlerterDoubleRef from "../../hooks/useOutsideAlerterDoubleRef";
 import { showModalCardOptions } from "../../app/features/modal/modalSlice";
+import { RootState } from "../../app/store";
 
 type PropTypes = {
   reel: PostType;
@@ -42,7 +43,6 @@ type PropTypes = {
     h: number;
     m: number;
   };
-  reelMuted: boolean;
   handleSound: () => void;
   handleLength: () => void;
 };
@@ -54,7 +54,7 @@ type CommentType = {
 };
 
 const ReelCard = forwardRef<HTMLVideoElement[], PropTypes>(
-  ({ reel, i, cardSize, reelMuted, handleSound, handleLength }, ref) => {
+  ({ reel, i, cardSize, handleSound, handleLength }, ref) => {
     const [reelPlay, setReelPlay] = useState(false);
     const [showComment, setShowComment] = useState(false);
     const [arrayCommentsTemp, setArrayCommentsTemp] = useState(
@@ -63,6 +63,7 @@ const ReelCard = forwardRef<HTMLVideoElement[], PropTypes>(
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const { muted } = useSelector((state: RootState) => state.post);
     const user = useSelector(selectCurrentUser) as UserType;
     const liked = reel?.likes.some((u) => u._id === user._id);
     const saved = reel?.savedBy.some((u) => u === user._id);
@@ -163,7 +164,7 @@ const ReelCard = forwardRef<HTMLVideoElement[], PropTypes>(
             loop
             onPlay={() => setReelPlay(true)}
             onPause={() => setReelPlay(false)}
-            muted={!reelMuted}
+            muted={!muted}
             ref={(el) => {
               if (ref && "current" in ref && ref.current && !ref.current[i]) {
                 ref.current.push(el as HTMLVideoElement);
@@ -182,8 +183,8 @@ const ReelCard = forwardRef<HTMLVideoElement[], PropTypes>(
             className="absolute top-4 right-4 p-2 bg-black/30 rounded-full text-white text-sm"
             onClick={handleSound}
           >
-            {reelMuted && <HiSpeakerWave />}
-            {!reelMuted && <HiSpeakerXMark />}
+            {muted && <HiSpeakerWave />}
+            {!muted && <HiSpeakerXMark />}
           </button>
           {/* play */}
           {!reelPlay && (

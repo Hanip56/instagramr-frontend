@@ -1,18 +1,20 @@
 import { useRef, useState, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { hideModalPost } from "../../app/features/modal/modalSlice";
+import {
+  hideModalPost,
+  showModalOwnCardOptions,
+} from "../../app/features/modal/modalSlice";
 import {
   IoHeartOutline,
   IoHeartSharp,
   IoChatbubbleOutline,
   IoPaperPlaneOutline,
   IoBookmarkOutline,
-  IoBookmarkSharp,
   IoBookmark,
 } from "react-icons/io5";
 import { VscSmiley } from "react-icons/vsc";
 import { Link } from "react-router-dom";
-import { BsThreeDots } from "react-icons/bs";
+import { BsPlayFill, BsThreeDots } from "react-icons/bs";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import useOutsideAlerter from "../../hooks/useOutsideAlerter";
@@ -37,13 +39,18 @@ import {
   useLikeAndUnlikeMutation,
   useSaveAndUnsaveMutation,
 } from "../../app/features/post/postApiSlice";
+import { handleMute } from "../../app/features/post/postSlice";
+import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 
 const ModalPost = () => {
   const dispatch = useDispatch();
   const user = useSelector(selectCurrentUser) as UserType;
-  const postId = useSelector((state: RootState) => state.modal.modalPayload);
+  const { postId } = useSelector(
+    (state: RootState) => state.modal.modalPayload
+  );
   const { data: currentPost, isLoading } = useGetSinglePostQuery(postId);
 
+  const [isVideoPlay, setIsVideoPlay] = useState(false);
   const [comment, setComment] = useState("");
   const [showEmojiBox, setShowEmojiBox] = useState(false);
   const emojiBoxRef = useRef(null);
@@ -54,11 +61,10 @@ const ModalPost = () => {
   const [saveAndUnsave] = useSaveAndUnsaveMutation();
   const [addComment] = useAddCommentMutation();
 
+  const { muted } = useSelector((state: RootState) => state.post);
   const liked = currentPost?.likes.some((u) => u._id === user._id);
   const totalLikes = currentPost?.likes.length;
   const saved = currentPost?.savedBy.some((u) => u === user._id);
-
-  console.log({ postModal: currentPost });
 
   const handleHideModal = () => {
     dispatch(hideModalPost());
@@ -125,7 +131,26 @@ const ModalPost = () => {
   };
 
   const handleShowModalOptions = () => {
-    console.log("handleShowModalOptions");
+    dispatch(showModalOwnCardOptions({ post: currentPost }));
+  };
+
+  const vidRef = useRef<HTMLVideoElement>(null);
+
+  const handlePlay = () => {
+    console.log("clicked");
+    setIsVideoPlay((prev) => {
+      if (prev) {
+        vidRef.current?.pause();
+        return false;
+      } else {
+        vidRef.current?.play();
+        return true;
+      }
+    });
+  };
+
+  const handleSound = () => {
+    dispatch(handleMute());
   };
 
   const addEmoji = (emojiData: any) => {
@@ -150,6 +175,7 @@ const ModalPost = () => {
         <img
           src={`${BASE_URL}/${currentPost?.postedBy?.profilePicture}`}
           alt={currentPost?.postedBy?.username}
+          className="w-full h-full object-cover"
         />
       </div>
       <div>
@@ -176,12 +202,14 @@ const ModalPost = () => {
           )}
         </h4>
       </div>
-      <div
-        className="w-6 h-6 flex justify-center items-center ml-auto cursor-pointer"
-        onClick={handleShowModalOptions}
-      >
-        {isOwnUser && <BsThreeDots />}
-      </div>
+      {isOwnUser && (
+        <div
+          className="w-6 h-6 flex justify-center items-center ml-auto cursor-pointer"
+          onClick={handleShowModalOptions}
+        >
+          <BsThreeDots />
+        </div>
+      )}
     </header>
   );
 
@@ -200,12 +228,42 @@ const ModalPost = () => {
               <div className="block sm:hidden">{headerEl}</div>
 
               <div className="basis-[75%] sm:basis-[65%] bg-black overflow-hidden">
-                <div className="w-full h-full">
-                  <img
-                    src={`${BASE_URL}/${currentPost?.content[0]}`}
-                    alt={currentPost?.caption}
-                    className="w-full h-full object-contain object-center"
-                  />
+                <div className="relative w-full h-full">
+                  {currentPost?.contentType === "image" && (
+                    <img
+                      src={`${BASE_URL}/${currentPost?.content[0]}`}
+                      alt={currentPost?.caption}
+                      className="w-full h-full object-contain object-center"
+                    />
+                  )}
+                  {currentPost?.contentType === "video" && (
+                    <div className="relative w-full h-full bg-black cursor-pointer">
+                      {!isVideoPlay && (
+                        <button className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 text-8xl text-lightBg">
+                          <BsPlayFill />
+                        </button>
+                      )}
+                      <video
+                        autoPlay
+                        // muted
+                        loop
+                        src={`${BASE_URL}/${currentPost?.content[0]}`}
+                        className="w-full h-full object-contain object-center"
+                        onClick={handlePlay}
+                        ref={vidRef}
+                        onPlay={() => setIsVideoPlay(true)}
+                        onPause={() => setIsVideoPlay(false)}
+                        // onLoad={() => setContentLoaded(true)}
+                      />
+                      <button
+                        className="absolute bottom-4 right-4 p-3 bg-black/30 rounded-full text-white text-base"
+                        onClick={handleSound}
+                      >
+                        {muted && <HiSpeakerWave />}
+                        {!muted && <HiSpeakerXMark />}
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="flex-1 flex flex-col">
@@ -216,6 +274,7 @@ const ModalPost = () => {
                       <img
                         src={`${BASE_URL}/${currentPost?.postedBy?.profilePicture}`}
                         alt={currentPost?.postedBy?.username}
+                        className="w-full h-full object-cover"
                       />
                     </div>
                     <div>
@@ -236,6 +295,7 @@ const ModalPost = () => {
                             <img
                               src={`${BASE_URL}/${currentPost?.postedBy?.profilePicture}`}
                               alt={comment?.user?.username}
+                              className="w-full h-full object-cover"
                             />
                           </div>
                         </Link>

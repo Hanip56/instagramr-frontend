@@ -1,5 +1,6 @@
 import { PostType, UserShortType } from "../../../../types";
 import apiSlice from "../../api/api";
+import { store } from "../../store";
 
 type ExplorePostsState = {
   posts: PostType[];
@@ -48,6 +49,13 @@ type AddCommentArg = {
 type GetSavedPostArg = {
   pageNumber: number;
   limit?: number;
+};
+
+type UpdatePostArg = {
+  postId: string;
+  body: {
+    caption: string;
+  };
 };
 
 const postApiSlice = apiSlice.injectEndpoints({
@@ -329,6 +337,27 @@ const postApiSlice = apiSlice.injectEndpoints({
         { type: "SinglePost", id: result?.data.postId },
       ],
     }),
+    updatePost: builder.mutation<any, UpdatePostArg>({
+      query: ({ postId, body }) => ({
+        url: `/api/post/${postId}`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: (result, err, arg) => {
+        return [{ type: "SinglePost", id: arg.postId }];
+      },
+    }),
+    deletePost: builder.mutation<any, string>({
+      query: (postId) => ({
+        url: `/api/post/${postId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: () => {
+        const userId = store.getState().auth.user?._id;
+
+        return [{ type: "SingleUser", id: userId }];
+      },
+    }),
   }),
 });
 
@@ -343,4 +372,6 @@ export const {
   useLikeAndUnlikeMutation,
   useSaveAndUnsaveMutation,
   useAddCommentMutation,
+  useDeletePostMutation,
+  useUpdatePostMutation,
 } = postApiSlice;

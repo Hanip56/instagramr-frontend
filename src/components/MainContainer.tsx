@@ -1,19 +1,35 @@
 import { useSelector } from "react-redux";
-import { ModalCardOptions, ModalCreate, ModalPost } from ".";
+import {
+  ModalCardOptions,
+  ModalOwnCardOptions,
+  ModalCreate,
+  ModalPost,
+} from ".";
 import Navbar from "./Navbar";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { RootState } from "../app/store";
 import usePreventScroll from "../hooks/usePreventScroll";
+import ModalEdit from "./Modals/ModalEdit";
 
 const MainContainer = () => {
-  const { modalCardOptions, modalPost, modalCreate } = useSelector(
-    (state: RootState) => state.modal
-  );
+  const {
+    modalCardOptions,
+    modalOwnCardOptions,
+    modalPost,
+    modalCreate,
+    modalEdit,
+  } = useSelector((state: RootState) => state.modal);
   const { token } = useSelector((state: RootState) => state.auth);
 
   const location = useLocation();
 
-  usePreventScroll([modalCardOptions, modalPost, modalCreate]);
+  usePreventScroll([
+    modalCardOptions,
+    modalPost,
+    modalCreate,
+    modalOwnCardOptions,
+    modalEdit,
+  ]);
 
   if (!token) {
     console.log({ token });
@@ -23,7 +39,9 @@ const MainContainer = () => {
   return (
     <>
       {modalCardOptions && <ModalCardOptions />}
+      {modalOwnCardOptions && <ModalOwnCardOptions />}
       {modalPost && <ModalPost />}
+      {modalEdit && <ModalEdit />}
       {modalCreate && <ModalCreate />}
 
       <div className="flex text-lightText dark:text-darkText">

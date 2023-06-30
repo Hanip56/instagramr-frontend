@@ -14,10 +14,6 @@ if (initialState.mode === "dark") {
   document.documentElement.classList.add("dark");
 }
 
-console.log(
-  window.matchMedia("(prefers-colors-schema:dark)").matches ? "dark" : "light"
-);
-
 const modeSlice = createSlice({
   name: "mode",
   initialState,

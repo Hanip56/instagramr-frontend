@@ -28,6 +28,7 @@ export { default as SkeletonPostRect } from "./skeletons/SkeletonPostRect";
 
 // Modals
 export { default as ModalCardOptions } from "./Modals/ModalCardOptions";
+export { default as ModalOwnCardOptions } from "./Modals/ModalOwnCardOptions";
 export { default as ModalPost } from "./Modals/ModalPost";
 export { default as ModalCreate } from "./Modals/ModalCreate";
 export { default as ModalGearProfile } from "./Modals/ModalGearProfile";

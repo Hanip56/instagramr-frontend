@@ -27,6 +27,9 @@ import {
   useSaveAndUnsaveMutation,
 } from "../../app/features/post/postApiSlice";
 import { SkeletonPostRect } from "..";
+import { handleMute } from "../../app/features/post/postSlice";
+import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
+import { RootState } from "../../app/store";
 
 type PropTypes = {
   post: PostType;
@@ -49,6 +52,8 @@ const Card = ({ post }: PropTypes) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const vidRef = useRef<HTMLVideoElement>(null);
 
+  const { muted } = useSelector((state: RootState) => state.post);
+  const { modalPost } = useSelector((state: RootState) => state.modal);
   const liked = post?.likes.some((u) => u._id === user._id);
   const saved = post?.savedBy.some((u) => u === user._id);
 
@@ -89,7 +94,7 @@ const Card = ({ post }: PropTypes) => {
   };
 
   const handleShowModal = () => {
-    dispatch(showModalPost(post._id));
+    dispatch(showModalPost({ postId: post._id }));
   };
 
   const handleShowModalCardOptions = () => {
@@ -130,16 +135,15 @@ const Card = ({ post }: PropTypes) => {
 
   useEffect(() => {
     if (vidRef.current) {
-      if (isVisible) {
+      if (isVisible && !modalPost) {
         vidRef.current.play();
       } else {
         vidRef.current.pause();
       }
     }
-  }, [isVisible]);
+  }, [isVisible, modalPost]);
 
   const handlePlay = () => {
-    console.log("clicked");
     setIsVideoPlay((prev) => {
       if (prev) {
         vidRef.current?.pause();
@@ -149,6 +153,10 @@ const Card = ({ post }: PropTypes) => {
         return true;
       }
     });
+  };
+
+  const handleSound = () => {
+    dispatch(handleMute());
   };
 
   return (
@@ -185,7 +193,7 @@ const Card = ({ post }: PropTypes) => {
           </div>
         )}
         <div className="w-full max-h-[35rem] overflow-hidden">
-          {post.contentType !== "video" && (
+          {post.contentType === "image" && (
             <img
               src={`${BASE_URL}/${post?.content[0]}`}
               alt="post img"
@@ -214,6 +222,13 @@ const Card = ({ post }: PropTypes) => {
                 onPause={() => setIsVideoPlay(false)}
                 onLoad={() => setContentLoaded(true)}
               />
+              <button
+                className="absolute bottom-4 right-4 p-2 bg-black/30 rounded-full text-white text-sm"
+                onClick={handleSound}
+              >
+                {muted && <HiSpeakerWave />}
+                {!muted && <HiSpeakerXMark />}
+              </button>
             </div>
           )}
         </div>

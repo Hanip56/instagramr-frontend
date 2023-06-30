@@ -4,6 +4,7 @@ const initialState = {
   followingPostPage: 1,
   explorePostPage: 1,
   savedPostPage: 1,
+  muted: false,
 };
 
 const postSlice = createSlice({
@@ -19,10 +20,17 @@ const postSlice = createSlice({
     nextPageSavedPost: (state) => {
       state.savedPostPage++;
     },
+    handleMute: (state) => {
+      state.muted = !state.muted;
+    },
   },
 });
 
-export const { nextPageExplorePost, nextPageFollowingPost, nextPageSavedPost } =
-  postSlice.actions;
+export const {
+  nextPageExplorePost,
+  nextPageFollowingPost,
+  nextPageSavedPost,
+  handleMute,
+} = postSlice.actions;
 
 export default postSlice.reducer;

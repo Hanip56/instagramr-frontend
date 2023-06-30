@@ -100,6 +100,7 @@ const Home = () => {
                     <img
                       src={`${BASE_URL}/${user.profilePicture}`}
                       alt={user.username}
+                      className="w-full h-full object-cover"
                     />
                   </div>
                 </div>

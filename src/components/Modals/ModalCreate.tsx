@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useRef } from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -13,8 +13,7 @@ const ModalCreate = () => {
   const dispatch = useDispatch();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [createPost, { isLoading, isError, isSuccess, error }] =
-    useCreatePostMutation();
+  const [createPost, { isLoading, isSuccess, error }] = useCreatePostMutation();
 
   console.log({ error });
 
@@ -41,14 +40,12 @@ const ModalCreate = () => {
 
     const formdata = new FormData();
 
-    formdata.append("contentType", "string");
+    formdata.append("contentType", postFileType);
     formdata.append("contents", postFile as File);
     formdata.append("caption", caption);
 
     await createPost(formdata);
   };
-
-  console.log({ postFile });
 
   const handleInputFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files !== null) {
@@ -69,7 +66,7 @@ const ModalCreate = () => {
     }
   };
 
-  const previewElement = () => {
+  const previewElement = useMemo(() => {
     if (postFileType === "image") {
       return (
         <img
@@ -89,7 +86,7 @@ const ModalCreate = () => {
         ></video>
       );
     }
-  };
+  }, [postFileType, postFile]);
 
   return (
     <>
@@ -119,7 +116,7 @@ const ModalCreate = () => {
               <div className="flex-1 md:basis-[65%] h-2 md:h-full bg-lightBg dark:bg-grayIg flex justify-center items-center">
                 {/* input file */}
                 {postFile ? (
-                  previewElement()
+                  previewElement
                 ) : (
                   <>
                     <button

@@ -3,15 +3,19 @@ import { createSlice } from "@reduxjs/toolkit";
 type InitialStateType = {
   modalPayload: null | any;
   modalCardOptions: boolean;
+  modalOwnCardOptions: boolean;
   modalPost: boolean;
   modalCreate: boolean;
+  modalEdit: boolean;
 };
 
 const initialState: InitialStateType = {
   modalPayload: null,
   modalCardOptions: false,
+  modalOwnCardOptions: false,
   modalPost: false,
   modalCreate: false,
+  modalEdit: false,
 };
 
 const modalSlice = createSlice({
@@ -25,6 +29,15 @@ const modalSlice = createSlice({
     hideModalCardOptions: (state) => {
       state.modalCardOptions = false;
       state.modalPayload = null;
+    },
+    showModalOwnCardOptions: (state, action) => {
+      if (action.payload) {
+        state.modalPayload = { ...state.modalPayload, ...action.payload };
+      }
+      state.modalOwnCardOptions = true;
+    },
+    hideModalOwnCardOptions: (state) => {
+      state.modalOwnCardOptions = false;
     },
     showModalPost: (state, action) => {
       state.modalPayload = action.payload;
@@ -40,16 +53,26 @@ const modalSlice = createSlice({
     hideModalCreate: (state) => {
       state.modalCreate = false;
     },
+    showModalEdit: (state) => {
+      state.modalEdit = true;
+    },
+    hideModalEdit: (state) => {
+      state.modalEdit = false;
+    },
   },
 });
 
 export const {
   hideModalCardOptions,
   showModalCardOptions,
+  hideModalOwnCardOptions,
+  showModalOwnCardOptions,
   hideModalPost,
   showModalPost,
   hideModalCreate,
   showModalCreate,
+  hideModalEdit,
+  showModalEdit,
 } = modalSlice.actions;
 
 export default modalSlice.reducer;

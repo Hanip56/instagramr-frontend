@@ -51,6 +51,13 @@ const authSlice = createSlice({
         state.user.profilePicture = "default_profile_picture.png";
       }
     },
+    deletePostState: (state, action) => {
+      if (state.user != undefined) {
+        state.user.posts = state.user?.posts.filter(
+          (post) => post._id !== action.payload
+        );
+      }
+    },
   },
 });
 
@@ -65,6 +72,7 @@ export const {
   unfollowUserState,
   editProfilePictureState,
   removeProfilePictureState,
+  deletePostState,
 } = authSlice.actions;
 
 export default authSlice.reducer;
