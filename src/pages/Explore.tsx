@@ -43,6 +43,8 @@ const Explore = () => {
     };
   }, [explorePostPage, explorePost?.maxPages]);
 
+  console.log({ isLoading, isFetching });
+
   return (
     <div>
       <main className="max-w-[935px] mx-auto grid grid-cols-3 gap-1 py-6 px-0 md:px-2 ">

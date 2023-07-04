@@ -66,6 +66,11 @@ const postApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body,
       }),
+      invalidatesTags: () => {
+        const userId = store.getState().auth.user?._id;
+
+        return [{ type: "SingleUser", id: userId }];
+      },
     }),
     getExplorePost: builder.query<ExplorePostsState, number>({
       query: (pageNumber) => `/api/post?page=${pageNumber}`,
@@ -347,7 +352,7 @@ const postApiSlice = apiSlice.injectEndpoints({
         return [{ type: "SinglePost", id: arg.postId }];
       },
     }),
-    deletePost: builder.mutation<any, string>({
+    deletePost: builder.mutation<string, string>({
       query: (postId) => ({
         url: `/api/post/${postId}`,
         method: "DELETE",
@@ -356,6 +361,20 @@ const postApiSlice = apiSlice.injectEndpoints({
         const userId = store.getState().auth.user?._id;
 
         return [{ type: "SingleUser", id: userId }];
+      },
+      async onQueryStarted(postId, { dispatch, queryFulfilled }) {
+        try {
+          const data = await queryFulfilled;
+          dispatch(
+            postApiSlice.util.updateQueryData("getExplorePost", 1, (draft) => {
+              draft.posts = draft.posts.filter(
+                (post) => post._id !== data.data
+              );
+            })
+          );
+        } catch (error) {
+          console.log(error);
+        }
       },
     }),
   }),

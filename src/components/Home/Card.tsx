@@ -30,6 +30,7 @@ import { SkeletonPostRect } from "..";
 import { handleMute } from "../../app/features/post/postSlice";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { RootState } from "../../app/store";
+import { Link } from "react-router-dom";
 
 type PropTypes = {
   post: PostType;
@@ -162,7 +163,10 @@ const Card = ({ post }: PropTypes) => {
   return (
     <div className="w-[100%]  mx-auto rounded-md bg-lightBg dark:bg-darkBg">
       <header className="w-full h-14 flex justify-between items-center px-2">
-        <div className="flex items-center gap-x-3">
+        <Link
+          to={`/${post?.postedBy.slug}`}
+          className="flex items-center gap-x-3"
+        >
           <div
             className={`w-10 h-10 rounded-full border border-white flex justify-center items-center`}
           >
@@ -178,7 +182,7 @@ const Card = ({ post }: PropTypes) => {
             <h4 className="font-semibold">{post?.postedBy.username}</h4>
             {/* <p className="text-gray-500 text-sm">{user?.fullname}</p> */}
           </div>
-        </div>
+        </Link>
         <div
           className="flex justify-center items-center mr-2 cursor-pointer hover:opacity-50"
           onClick={handleShowModalCardOptions}
@@ -233,7 +237,7 @@ const Card = ({ post }: PropTypes) => {
           )}
         </div>
         <div className="flex items-center justify-between text-2xl">
-          <div className="flex items-center gap-x-4 py-3">
+          <div className="flex items-center gap-x-4 py-3 px-2 sm:px-0">
             <button onClick={handleLoves}>
               {liked && <IoHeartSharp className="text-red-500" />}
               {!liked && <IoHeartOutline className="hover:opacity-75" />}
@@ -246,13 +250,16 @@ const Card = ({ post }: PropTypes) => {
             </button>
           </div>
           <div>
-            <button className="hover:opacity-75" onClick={handleSave}>
+            <button
+              className="hover:opacity-75 mr-1 sm:mr-0"
+              onClick={handleSave}
+            >
               {saved && <IoBookmark className="text-black dark:text-white" />}
               {!saved && <IoBookmarkOutline className="hover:opacity-75" />}
             </button>
           </div>
         </div>
-        <div className="pb-2 leading-7 text-sm">
+        <div className="pb-2 leading-7 text-sm px-2 sm:px-0">
           <p className="font-semibold">{post?.likes?.length} Likes</p>
           <p>
             <span className="font-semibold">{post?.postedBy?.username}</span>{" "}
@@ -281,7 +288,7 @@ const Card = ({ post }: PropTypes) => {
           </p>
         </div>
       </main>
-      <footer className="flex justify-between py-2 text-xs text-lightText dark:text-darkText">
+      <footer className="flex justify-between py-2 px-2 sm:px-0 text-xs text-lightText dark:text-darkText">
         <form
           onSubmit={handleSubmitComment}
           className="relative w-full flex gap-x-2"

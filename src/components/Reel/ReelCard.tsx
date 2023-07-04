@@ -164,7 +164,7 @@ const ReelCard = forwardRef<HTMLVideoElement[], PropTypes>(
             loop
             onPlay={() => setReelPlay(true)}
             onPause={() => setReelPlay(false)}
-            muted={!muted}
+            muted={muted}
             ref={(el) => {
               if (ref && "current" in ref && ref.current && !ref.current[i]) {
                 ref.current.push(el as HTMLVideoElement);
@@ -183,8 +183,8 @@ const ReelCard = forwardRef<HTMLVideoElement[], PropTypes>(
             className="absolute top-4 right-4 p-2 bg-black/30 rounded-full text-white text-sm"
             onClick={handleSound}
           >
-            {muted && <HiSpeakerWave />}
-            {!muted && <HiSpeakerXMark />}
+            {!muted && <HiSpeakerWave />}
+            {muted && <HiSpeakerXMark />}
           </button>
           {/* play */}
           {!reelPlay && (
@@ -205,6 +205,7 @@ const ReelCard = forwardRef<HTMLVideoElement[], PropTypes>(
                 <img
                   src={`${BASE_URL}/${reel?.postedBy?.profilePicture}`}
                   alt={reel?.postedBy?.username}
+                  className="w-full h-full object-cover"
                 />
               </div>
               <div>

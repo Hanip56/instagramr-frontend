@@ -28,7 +28,31 @@ const Profile = () => {
   const { data: shownUser, isLoading } = useGetSingleUserQuery(currentSlug);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="max-w-[1013px] px-0 md:px-4 mx-auto flex flex-col pt-6">
+        <header className="max-w-[935px] py-2 px-2 md:px-6 flex flex-col gap-6 mb-6 md:mb-12">
+          <div className="w-full flex gap-6 items-center gap-y-10">
+            <div className="md:basis-[35%] flex justify-center items-center">
+              <div className="w-24 h-24 md:w-36 md:h-36 flex-shrink-0 bg-grayIg rounded-full flex justify-center items-center"></div>
+            </div>
+            <div className="md:block flex-1 space-y-4 md:space-y-7 md:pt-6">
+              <div className="flex items-center gap-6">
+                <div className="w-16 h-6 bg-grayIg rounded-md"></div>
+                <div className="w-20 h-6 bg-grayIg rounded-md"></div>
+              </div>
+              <div className="flex items-center gap-6">
+                <div className="w-20 h-6 bg-grayIg rounded-md"></div>
+                <div className="w-20 h-6 bg-grayIg rounded-md"></div>
+                <div className="w-20 h-6 bg-grayIg rounded-md"></div>
+              </div>
+              <div className="flex items-center gap-6">
+                <div className="w-24 h-6 bg-grayIg rounded-md"></div>
+              </div>
+            </div>
+          </div>
+        </header>
+      </div>
+    );
   }
 
   const isOwnUser = user.slug === currentSlug;

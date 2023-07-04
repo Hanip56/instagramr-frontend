@@ -224,10 +224,10 @@ const ModalPost = () => {
         <div className="animate-fadeIn">
           {isLoading && <SkeletonModalPost />}
           {!isLoading && (
-            <div className="flex flex-col sm:flex-row w-[80vw] lg:w-[80vw] bg-white dark:bg-darkBg h-[80vh] sm:h-[90vh] rounded-md overflow-hidden justify-between">
+            <div className="flex flex-col sm:flex-row w-[80vw] lg:w-[80vw] bg-white dark:bg-darkBg  h-[80vh] sm:h-[90vh] rounded-md overflow-hidden justify-between">
               <div className="block sm:hidden">{headerEl}</div>
 
-              <div className="basis-[75%] sm:basis-[65%] bg-black overflow-hidden">
+              <div className="basis-[70%] sm:basis-[65%] bg-black overflow-hidden">
                 <div className="relative w-full h-full">
                   {currentPost?.contentType === "image" && (
                     <img
@@ -245,7 +245,7 @@ const ModalPost = () => {
                       )}
                       <video
                         autoPlay
-                        // muted
+                        muted={muted}
                         loop
                         src={`${BASE_URL}/${currentPost?.content[0]}`}
                         className="w-full h-full object-contain object-center"
@@ -259,14 +259,14 @@ const ModalPost = () => {
                         className="absolute bottom-4 right-4 p-3 bg-black/30 rounded-full text-white text-base"
                         onClick={handleSound}
                       >
-                        {muted && <HiSpeakerWave />}
-                        {!muted && <HiSpeakerXMark />}
+                        {!muted && <HiSpeakerWave />}
+                        {muted && <HiSpeakerXMark />}
                       </button>
                     </div>
                   )}
                 </div>
               </div>
-              <div className="flex-1 flex flex-col">
+              <div className="flex-1 flex flex-col pb-2">
                 <div className="hidden sm:block">{headerEl}</div>
                 <main className="hidden sm:block p-2 px-4 basis-[80%] border border-transparent border-b-gray-200 dark:border-b-gray-200/20 ">
                   <div className="flex gap-x-4">

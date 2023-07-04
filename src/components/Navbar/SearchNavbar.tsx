@@ -38,6 +38,9 @@ const SearchNavbar = forwardRef<HTMLDivElement, PropTypes>(
           </button>
         </div>
         <div className="overflow-y-scroll flex flex-col flex-1 border border-transparent border-t-grayIg/10 dark:border-t-gray-200/20 py-2">
+          {(searchedUsers ?? []).length < 1 && (
+            <span className="p-4 px-6 opacity-75">No Results Found</span>
+          )}
           {searchedUsers?.map((user) => (
             <Link
               to={`/${user.slug}`}

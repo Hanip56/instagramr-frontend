@@ -4,7 +4,7 @@ const initialState = {
   followingPostPage: 1,
   explorePostPage: 1,
   savedPostPage: 1,
-  muted: false,
+  muted: true,
 };
 
 const postSlice = createSlice({

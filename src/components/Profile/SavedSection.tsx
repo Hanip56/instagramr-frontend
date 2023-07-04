@@ -45,7 +45,7 @@ const SavedSection = () => {
             {saved?.map((post, idx) => (
               <img
                 key={idx}
-                src={`${BASE_URL}/${post.content[0]}`}
+                src={`${BASE_URL}/thumbnail/${post.thumbnail}`}
                 alt="postImage"
                 className="w-full h-full object-cover"
               />

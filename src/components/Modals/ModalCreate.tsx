@@ -113,7 +113,7 @@ const ModalCreate = () => {
               </button>
             </div>
             <div className="flex flex-col md:flex-row h-[30rem]">
-              <div className="flex-1 md:basis-[65%] h-2 md:h-full bg-lightBg dark:bg-grayIg flex justify-center items-center">
+              <div className="basis-1/2 md:basis-[65%] h-2 md:h-full bg-lightBg dark:bg-grayIg flex justify-center items-center">
                 {/* input file */}
                 {postFile ? (
                   previewElement
@@ -137,7 +137,7 @@ const ModalCreate = () => {
                   </>
                 )}
               </div>
-              <div className="space-y-2 flex-1 w-full h-full border border-transparent border-l-darkBg/10 dark:border-l-white/20 p-3">
+              <div className="space-y-2 basis-1/2 w-full h-full border border-transparent border-l-darkBg/10 dark:border-l-white/20 p-3">
                 <div className="flex gap-x-2 items-center">
                   {/* <div className="w-10 h-10 overflow-hidden rounded-full">
                     <img
@@ -151,15 +151,14 @@ const ModalCreate = () => {
                     {/* <p className="text-sm text-gray-400">{user?.fullname}</p> 
                   </div> */}
                 </div>
-                <div>
+                <div className="h-full">
                   <textarea
-                    className="outline-none bg-transparent"
+                    className="outline-none bg-transparent w-full h-full resize-none"
                     name="caption"
                     onChange={(e) => setCaption(e.target.value)}
                     value={caption}
                     placeholder="Write caption"
                     cols={30}
-                    rows={10}
                   ></textarea>
                 </div>
               </div>

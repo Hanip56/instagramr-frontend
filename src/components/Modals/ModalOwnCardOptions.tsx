@@ -16,7 +16,7 @@ const ModalOwnCardOptions = () => {
   const dispatch = useDispatch();
   const user = useSelector(selectCurrentUser) as UserType;
   const postId = useSelector(
-    (state: RootState) => state.modal.modalPayload
+    (state: RootState) => state.modal.modalPayload.postId
   ) as string;
 
   const [deletePost] = useDeletePostMutation();
@@ -27,6 +27,7 @@ const ModalOwnCardOptions = () => {
 
   const handleDelete = async () => {
     const res = await deletePost(postId);
+
     if ("data" in res) {
       dispatch(deletePostState(postId));
       dispatch(hideModalOwnCardOptions());

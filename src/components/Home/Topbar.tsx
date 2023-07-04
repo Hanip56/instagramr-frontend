@@ -22,7 +22,7 @@ const Topbar = () => {
   useOutsideAlerter(inputContainerRef, setIsFocused);
 
   return (
-    <div className="flex md:hidden fixed z-50 bg-lightBg dark:bg-darkBg top-0 w-full h-[60px] justify-between items-center border border-transparent border-b-black/20 dark:border-b-white/20 px-4">
+    <div className="flex md:hidden fixed z-10 bg-lightBg dark:bg-darkBg top-0 w-full h-[60px] justify-between items-center border border-transparent border-b-black/20 dark:border-b-white/20 px-4">
       <span>INSTAGRAMR</span>
       <div
         ref={inputContainerRef}

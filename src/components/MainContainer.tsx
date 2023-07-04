@@ -6,7 +6,12 @@ import {
   ModalPost,
 } from ".";
 import Navbar from "./Navbar";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import {
+  Navigate,
+  Outlet,
+  ScrollRestoration,
+  useLocation,
+} from "react-router-dom";
 import { RootState } from "../app/store";
 import usePreventScroll from "../hooks/usePreventScroll";
 import ModalEdit from "./Modals/ModalEdit";
@@ -44,6 +49,7 @@ const MainContainer = () => {
       {modalEdit && <ModalEdit />}
       {modalCreate && <ModalCreate />}
 
+      <ScrollRestoration getKey={(location) => location.pathname} />
       <div className="flex text-lightText dark:text-darkText">
         <Navbar />
         {/* main */}
