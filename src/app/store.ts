@@ -4,6 +4,7 @@ import modalReducer from "./features/modal/modalSlice";
 import authReducer from "./features/auth/authSlice";
 import apiSlice from "./api/api";
 import postReducer from "./features/post/postSlice";
+import socketReducer from "./features/socket/socketSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,8 +13,10 @@ export const store = configureStore({
     post: postReducer,
     mode: modeReducer,
     modal: modalReducer,
+    socket: socketReducer,
   },
-  middleware: (gdm) => gdm().concat(apiSlice.middleware),
+  middleware: (gdm) =>
+    gdm({ serializableCheck: false }).concat(apiSlice.middleware),
   devTools: true,
 });
 

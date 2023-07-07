@@ -16,6 +16,10 @@ export { default as TopBar } from "./Home/TopBar";
 export { default as ReelCard } from "./Reel/ReelCard";
 export { default as ReelCommentCard } from "./Reel/ReelCommentCard";
 
+// Messages
+export { default as ChatContainer } from "./Messages/ChatContainer";
+export { default as PreChat } from "./Messages/PreChat";
+
 // Profile
 export { default as PostsSection } from "./Profile/PostsSection";
 export { default as SavedSection } from "./Profile/SavedSection";
@@ -35,6 +39,7 @@ export { default as ModalGearProfile } from "./Modals/ModalGearProfile";
 export { default as ModalFollowers } from "./Modals/ModalFollowers";
 export { default as ModalFollowings } from "./Modals/ModalFollowings";
 export { default as ModalChangeProfilePicture } from "./Modals/ModalChangeProfilePicture";
+export { default as ModalNewMessage } from "./Modals/ModalNewMessage";
 
 // UI
 export { default as Spinner } from "./UI/Spinner";

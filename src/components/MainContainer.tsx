@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   ModalCardOptions,
   ModalOwnCardOptions,
@@ -15,6 +15,15 @@ import {
 import { RootState } from "../app/store";
 import usePreventScroll from "../hooks/usePreventScroll";
 import ModalEdit from "./Modals/ModalEdit";
+import io from "socket.io-client";
+import { BASE_URL } from "../constants";
+import { useEffect } from "react";
+import {
+  ConversationsType,
+  addChat,
+  addConversations,
+  initialSocket,
+} from "../app/features/socket/socketSlice";
 
 const MainContainer = () => {
   const {
@@ -24,9 +33,13 @@ const MainContainer = () => {
     modalCreate,
     modalEdit,
   } = useSelector((state: RootState) => state.modal);
-  const { token } = useSelector((state: RootState) => state.auth);
+  const { token, user } = useSelector((state: RootState) => state.auth);
+  const { socket, conversations } = useSelector(
+    (state: RootState) => state.socket
+  );
 
   const location = useLocation();
+  const dispatch = useDispatch();
 
   usePreventScroll([
     modalCardOptions,
@@ -36,10 +49,64 @@ const MainContainer = () => {
     modalEdit,
   ]);
 
+  // initial socket
+  useEffect(() => {
+    if (!user?._id) return;
+    const socket = io(BASE_URL, { query: { id: user._id } });
+    const fetchConversations = async () => {
+      // fetch here
+      const conversations: ConversationsType[] = [];
+      dispatch(initialSocket({ socket, conversations }));
+    };
+    fetchConversations();
+
+    return () => {
+      socket.close();
+    };
+  }, [user?._id, dispatch]);
+
+  // create receive-message handler
+  useEffect(() => {
+    if (socket) {
+      socket?.on(
+        "receive-message",
+        ({ roomId, recipients, sender, text, createdAt }) => {
+          const preChat = {
+            userId: sender._id,
+            text,
+            createdAt,
+          };
+          if (
+            // if conversations already exist
+            conversations.some((conversation) => conversation.roomId === roomId)
+          ) {
+            if (preChat) {
+              dispatch(addChat({ roomId, preChat }));
+            }
+            return;
+          } else {
+            dispatch(
+              addConversations({
+                newMembers: [sender],
+                preRoomId: roomId,
+                preChat,
+              })
+            );
+          }
+        }
+      );
+    }
+
+    return () => {
+      socket?.off("receive-message");
+    };
+  }, [socket, conversations, dispatch]);
+
   if (!token) {
-    console.log({ token });
     return <Navigate to="/login" replace={true} />;
   }
+
+  const regexForMessagePage = new RegExp(/^\/direct(?:\/(.*))?$/);
 
   return (
     <>
@@ -55,7 +122,7 @@ const MainContainer = () => {
         {/* main */}
         <div
           className={`ml-0 pb-16 md:pb-0 md:ml-[4.5rem] flex-1 min-h-[calc(100vh-45px)] md:min-h-screen ${
-            location.pathname === "/direct/inbox" ? "" : "lg:ml-[244px]"
+            location.pathname.match(regexForMessagePage) ? "" : "lg:ml-[244px]"
           }`}
         >
           <Outlet />

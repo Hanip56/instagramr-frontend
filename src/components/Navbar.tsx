@@ -35,8 +35,13 @@ const Navbar = () => {
   const searchNavRef = createRef<HTMLDivElement>();
   const searchNotifRef = createRef<HTMLDivElement>();
 
+  const regexForMessagePage = new RegExp(/^\/direct(?:\/(.*))?$/);
   const alternateBar =
-    searchBar || notifBar || location.pathname === "/direct/inbox";
+    searchBar || notifBar || regexForMessagePage.test(location.pathname);
+
+  console.log({
+    regexForMessagePage: regexForMessagePage.test(location.pathname),
+  });
 
   const handleCloseAlternateBar = () => {
     setSearchBar(false);
@@ -169,7 +174,7 @@ const Navbar = () => {
             )}
           </NavLink>
           <NavLink
-            to={`/direct/inbox`}
+            to={`/direct`}
             className="navList"
             onClick={handleCloseAlternateBar}
           >

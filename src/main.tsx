@@ -6,7 +6,9 @@ import { Edit, Explore, Home, Messages, Profile, Reels, Saved } from "./pages";
 import { Provider } from "react-redux";
 import { store } from "./app/store.ts";
 import {
+  ChatContainer,
   PostsSection,
+  PreChat,
   SavedSection,
   StarterContainer,
   TaggedSection,
@@ -44,8 +46,18 @@ const router = createBrowserRouter([
             element: <Reels />,
           },
           {
-            path: "direct/inbox",
+            path: "direct",
             element: <Messages />,
+            children: [
+              {
+                path: "",
+                element: <PreChat />,
+              },
+              {
+                path: ":roomId",
+                element: <ChatContainer />,
+              },
+            ],
           },
           {
             path: ":username",
