@@ -4,8 +4,11 @@ import { useFindUserQuery } from "../../app/features/user/userApiSlice";
 import { BASE_URL } from "../../constants";
 import { IoCheckmark } from "react-icons/io5";
 import { UserShortType } from "../../../types";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addConversations } from "../../app/features/socket/socketSlice";
+import { selectCurrentUser } from "../../app/features/auth/authSlice";
+import { useCreateConversationMutation } from "../../app/features/socket/socketApiSlice";
+import { customAlphabet } from "nanoid";
 
 type PropTypes = {
   handleHideModal: () => void;
@@ -14,7 +17,11 @@ type PropTypes = {
 const ModalNewMessage = ({ handleHideModal }: PropTypes) => {
   const [search, setSearch] = useState("");
   const [selectedUsers, setSelectedUsers] = useState<UserShortType[]>([]);
+  const user = useSelector(selectCurrentUser);
   const dispatch = useDispatch();
+  const nanoId = customAlphabet("0123456789", 10);
+
+  const [createConversation] = useCreateConversationMutation();
 
   const {
     data: searchedUsers,
@@ -24,6 +31,11 @@ const ModalNewMessage = ({ handleHideModal }: PropTypes) => {
   } = useFindUserQuery(search);
 
   const handleAddSelectedUser = (userInfo: UserShortType) => {
+    if (userInfo._id === user._id) {
+      console.log("You can't add yourself!");
+      return;
+    }
+
     setSelectedUsers((prev) => {
       if (prev.find((u) => u._id === userInfo._id)) {
         return prev.filter((u) => u._id !== userInfo._id);
@@ -37,8 +49,20 @@ const ModalNewMessage = ({ handleHideModal }: PropTypes) => {
     setSelectedUsers((prev) => prev.filter((user) => user._id !== userId));
   };
 
-  const handleSubmit = () => {
-    dispatch(addConversations({ newMembers: selectedUsers }));
+  const handleSubmit = async () => {
+    const members = selectedUsers.map((member) => member._id);
+    const res = await createConversation({ members, roomId: nanoId() });
+
+    if ("data" in res) {
+      const conversation = res.data;
+      dispatch(
+        addConversations({
+          newMembers: conversation.members,
+          preRoomId: conversation.roomId,
+        })
+      );
+    }
+
     handleHideModal();
   };
 

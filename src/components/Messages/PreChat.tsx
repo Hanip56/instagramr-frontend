@@ -12,7 +12,7 @@ const PreChat = () => {
         </span>
       </div>
       <h3 className="text-lg font-semibold">Your messages</h3>
-      <p className="text-sm opacity-75">
+      <p className="text-sm opacity-75 text-center">
         Send private photos and messages to a friend or group
       </p>
       <button className="igButtonBlue mt-2" onClick={handleShowModalNewMessage}>

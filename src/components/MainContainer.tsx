@@ -24,6 +24,7 @@ import {
   addConversations,
   initialSocket,
 } from "../app/features/socket/socketSlice";
+import { useGetOwnConversationsMutation } from "../app/features/socket/socketApiSlice";
 
 const MainContainer = () => {
   const {
@@ -37,6 +38,8 @@ const MainContainer = () => {
   const { socket, conversations } = useSelector(
     (state: RootState) => state.socket
   );
+
+  const [getOwnConversations] = useGetOwnConversationsMutation();
 
   const location = useLocation();
   const dispatch = useDispatch();
@@ -53,10 +56,18 @@ const MainContainer = () => {
   useEffect(() => {
     if (!user?._id) return;
     const socket = io(BASE_URL, { query: { id: user._id } });
+    socket.emit("addUser");
+    socket.on("getOnlineUsers", (users) => {
+      dispatch(initialSocket({ users }));
+    });
     const fetchConversations = async () => {
       // fetch here
-      const conversations: ConversationsType[] = [];
-      dispatch(initialSocket({ socket, conversations }));
+      let conversations: ConversationsType[] = [];
+      const res = await getOwnConversations();
+      if ("data" in res) {
+        conversations = res.data;
+      }
+      dispatch(initialSocket({ socket, conversations: conversations }));
     };
     fetchConversations();
 
@@ -70,7 +81,7 @@ const MainContainer = () => {
     if (socket) {
       socket?.on(
         "receive-message",
-        ({ roomId, recipients, sender, text, createdAt }) => {
+        ({ roomId, members, sender, text, createdAt }) => {
           const preChat = {
             userId: sender._id,
             text,
@@ -87,7 +98,7 @@ const MainContainer = () => {
           } else {
             dispatch(
               addConversations({
-                newMembers: [sender],
+                newMembers: members,
                 preRoomId: roomId,
                 preChat,
               })

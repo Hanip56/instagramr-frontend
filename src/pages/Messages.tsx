@@ -12,7 +12,13 @@ import { RootState } from "../app/store";
 const Messages = () => {
   const [showModalNewMessage, setShowModalNewMessage] = useState(false);
   const user = useSelector(selectCurrentUser) as UserType;
-  const { conversations } = useSelector((state: RootState) => state.socket);
+  const { conversations, online } = useSelector(
+    (state: RootState) => state.socket
+  );
+
+  const isOnline = (memberId: string) => {
+    return online.includes(memberId);
+  };
 
   return (
     <>
@@ -37,17 +43,17 @@ const Messages = () => {
           </div>
           <div className="hidden px-6 md:flex items-center justify-between">
             <h1 className="text-lg font-bold">Messages</h1>
-            <a
+            {/* <a
               href="#"
               className="text-gray-400 hover:opacity-50 font-semibold text-sm"
             >
               Requests
-            </a>
+            </a> */}
           </div>
 
-          <div className="hidden md:block w-full h-full overflow-y-auto">
+          <div className="w-full h-full overflow-y-auto">
             {conversations.length < 1 && (
-              <div className="w-full h-full flex justify-center items-center">
+              <div className="hidden w-full h-full md:flex justify-center items-center">
                 No messages found.
               </div>
             )}
@@ -57,15 +63,21 @@ const Messages = () => {
                 key={conversation.roomId}
                 className="cursor-pointer"
               >
-                <div className="w-full py-2 px-6 flex-shrink-0 flex gap-2 items-center gap-y-1 hover:bg-gray-100/50 dark:hover:bg-lightBg/10">
+                <div className="w-full py-2 px-4 md:px-6 flex-shrink-0 flex gap-2 items-center gap-y-1 hover:bg-gray-100/50 dark:hover:bg-lightBg/10">
                   <div className="w-16 h-16 flex-shrink-0 border-2 border-white rounded-full flex justify-center items-center">
-                    <div className="w-[91%] h-[91%] rounded-full bg-gray-300 overflow-hidden">
+                    <div className="w-[91%] h-[91%] rounded-full bg-gray-300">
                       {conversation.members.length === 1 ? (
-                        <img
-                          src={`${BASE_URL}/${conversation.members[0].profilePicture}`}
-                          alt={conversation.members[0].username}
-                          className="w-full h-full object-cover"
-                        />
+                        <div className="relative w-full h-full">
+                          <img
+                            src={`${BASE_URL}/${conversation.members[0].profilePicture}`}
+                            alt={conversation.members[0].username}
+                            className="w-full h-full object-cover rounded-full overflow-hidden"
+                          />
+                          {/* online tags */}
+                          {isOnline(conversation.members[0]._id) && (
+                            <div className="absolute w-3 h-3 border-2 border-white bottom-0 right-0 rounded-full bg-green-500"></div>
+                          )}
+                        </div>
                       ) : (
                         <div className="w-full h-full text-2xl flex justify-center items-center">
                           <BsPeopleFill />
@@ -75,16 +87,18 @@ const Messages = () => {
                   </div>
                   <div className="hidden md:block">
                     <p className="text-sm font-bold">
-                      {conversation.members.map((user, idx) => (
+                      {conversation.members?.map((user, idx) => (
                         <span key={user._id}>
                           {user.username}
                           {conversation.members.length === idx + 1 ? "" : ", "}
                         </span>
                       ))}
                     </p>
-                    <p className="text-xs tracking-wide text-gray-400">
-                      Messages Sent
-                    </p>
+                    {isOnline(conversation.members[0]._id) && (
+                      <p className="text-xs tracking-wide text-gray-400">
+                        Active now
+                      </p>
+                    )}
                   </div>
                 </div>
               </Link>

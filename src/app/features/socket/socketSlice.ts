@@ -18,11 +18,13 @@ export type ConversationsType = {
 type InitialStateType = {
   socket: Socket | null;
   conversations: ConversationsType[];
+  online: string[];
 };
 
 const initialState: InitialStateType = {
   socket: null,
   conversations: [],
+  online: [],
 };
 
 type AddConversationsType = {
@@ -38,12 +40,15 @@ const socketSlice = createSlice({
   initialState,
   reducers: {
     initialSocket: (state, action) => {
-      const { socket, conversations } = action.payload;
+      const { socket, conversations, users } = action.payload;
       if (socket) {
         state.socket = socket;
       }
       if (conversations) {
         state.conversations = conversations;
+      }
+      if (users) {
+        state.online = users;
       }
     },
     addChat: (state, action) => {
@@ -84,9 +89,20 @@ const socketSlice = createSlice({
         state.conversations.push({ roomId, members: newMembers, chats });
       }
     },
+    deleteConversationState: (state, action) => {
+      const { roomId } = action.payload;
+      state.conversations = state.conversations.filter(
+        (conversation) => conversation.roomId !== roomId
+      );
+    },
   },
 });
 
-export const { initialSocket, addChat, addConversations } = socketSlice.actions;
+export const {
+  initialSocket,
+  addChat,
+  addConversations,
+  deleteConversationState,
+} = socketSlice.actions;
 
 export default socketSlice.reducer;
