@@ -10,7 +10,7 @@ import { RootState } from "../../app/store";
 import { toggleMode } from "../../app/features/mode/modeSlice";
 import { useLogoutMutation } from "../../app/features/auth/authApiSlice";
 import apiSlice from "../../app/api/api";
-import { useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logout as logoutState } from "../../app/features/auth/authSlice";
 
 type PropTypes = {
@@ -27,6 +27,7 @@ const MenuBar = ({ alternateBar }: PropTypes) => {
   const navigate = useNavigate();
 
   const [logout] = useLogoutMutation();
+  const location = useLocation();
 
   useOutsideAlerterDoubleRef(barRef, setShowBar, moreBtnRef);
 
@@ -55,6 +56,10 @@ const MenuBar = ({ alternateBar }: PropTypes) => {
       setSwitchAppearance(false);
     }
   }, [showBar]);
+
+  useEffect(() => {
+    setShowBar(false);
+  }, [location]);
 
   return (
     <div className="hidden md:flex relative text-lightText dark:text-darkText">
@@ -127,24 +132,24 @@ const MenuBar = ({ alternateBar }: PropTypes) => {
             </>
           ) : (
             <>
-              <a href="#" className="menuList">
+              <Link to={"/accounts/edit"} className="menuList">
                 <span className="text-2xl p-3">
                   <TbSettings />
                 </span>
                 <span>Settings</span>
-              </a>
-              <a href="#" className="menuList">
+              </Link>
+              {/* <a href="#" className="menuList">
                 <span className="text-2xl p-3">
                   <AiOutlineFieldTime />
                 </span>
                 <span>Your activity</span>
-              </a>
-              <a href="#" className="menuList">
+              </a> */}
+              <Link to={"/sky/saved"} className="menuList">
                 <span className="text-2xl p-3">
                   <BiTagAlt />
                 </span>
                 <span>Saved</span>
-              </a>
+              </Link>
               <button
                 aria-label="show switch appearance toggle"
                 className="menuList"
@@ -155,12 +160,12 @@ const MenuBar = ({ alternateBar }: PropTypes) => {
                 </span>
                 <span>Switch appearance</span>
               </button>
-              <a href="#" className="menuList">
+              {/* <a href="#" className="menuList">
                 <span className="text-2xl p-3">
                   <TbMessageReport />
                 </span>
                 <span>Report a problem</span>
-              </a>
+              </a> */}
               <div className="w-[calc(100%+16px)] my-2 h-2 bg-slate-500/20 -m-2" />
               <div className="menuList">
                 <span className="p-4">Switch accounts</span>

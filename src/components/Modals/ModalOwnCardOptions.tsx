@@ -2,13 +2,14 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   hideModalOwnCardOptions,
   hideModalPost,
+  setToast,
   showModalEdit,
 } from "../../app/features/modal/modalSlice";
 import {
   deletePostState,
   selectCurrentUser,
 } from "../../app/features/auth/authSlice";
-import { PostType, UserType } from "../../../types";
+import { UserType } from "../../../types";
 import { RootState } from "../../app/store";
 import { useDeletePostMutation } from "../../app/features/post/postApiSlice";
 
@@ -32,6 +33,7 @@ const ModalOwnCardOptions = () => {
       dispatch(deletePostState(postId));
       dispatch(hideModalOwnCardOptions());
       dispatch(hideModalPost());
+      dispatch(setToast("The post has been deleted"));
     }
   };
   const handleEdit = () => {

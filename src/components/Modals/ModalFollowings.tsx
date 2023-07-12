@@ -49,6 +49,7 @@ const ModalFollowings = ({ hide, slug }: PropTypes) => {
       dispatch(followUserState(targetId));
     }
   };
+
   const handleUnfollow = async (targetId: string) => {
     const res = await unfollow({
       userId: user._id,

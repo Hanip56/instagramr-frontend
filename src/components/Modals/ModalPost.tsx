@@ -1,4 +1,4 @@
-import { useRef, useState, FormEvent } from "react";
+import { useRef, useState, FormEvent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   hideModalPost,
@@ -23,7 +23,7 @@ import { BASE_URL } from "../../constants";
 
 import { SkeletonModalPost } from "..";
 import { RootState } from "../../app/store";
-import { PostType, UserType } from "../../../types";
+import { UserType } from "../../../types";
 import {
   followUserState,
   selectCurrentUser,
@@ -54,6 +54,7 @@ const ModalPost = () => {
   const [comment, setComment] = useState("");
   const [showEmojiBox, setShowEmojiBox] = useState(false);
   const emojiBoxRef = useRef(null);
+  const commentRef = useRef<HTMLInputElement>(null);
 
   const [follow] = useFollowUserMutation();
   const [unfollow] = useUnfollowUserMutation();
@@ -329,12 +330,15 @@ const ModalPost = () => {
                           </span>
                         )}
                       </button>
-                      <button className="hover:opacity-75">
+                      <button
+                        onClick={() => commentRef.current?.focus()}
+                        className="hover:opacity-75"
+                      >
                         <IoChatbubbleOutline />
                       </button>
-                      <button className="hover:opacity-75">
+                      <Link to={"/direct"} className="hover:opacity-75">
                         <IoPaperPlaneOutline />
-                      </button>
+                      </Link>
                       <button
                         className="hover:opacity-75 ml-auto"
                         onClick={handleSave}
@@ -390,6 +394,7 @@ const ModalPost = () => {
                         placeholder="Add a comment"
                         value={comment}
                         onChange={(e) => setComment(e.target.value)}
+                        ref={commentRef}
                       />
                       <button
                         type="submit"

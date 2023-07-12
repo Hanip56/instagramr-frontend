@@ -4,6 +4,7 @@ import {
   ModalOwnCardOptions,
   ModalCreate,
   ModalPost,
+  Toast,
 } from ".";
 import Navbar from "./Navbar";
 import {
@@ -25,6 +26,7 @@ import {
   initialSocket,
 } from "../app/features/socket/socketSlice";
 import { useGetOwnConversationsMutation } from "../app/features/socket/socketApiSlice";
+import { hideModalPost } from "../app/features/modal/modalSlice";
 
 const MainContainer = () => {
   const {
@@ -33,6 +35,7 @@ const MainContainer = () => {
     modalPost,
     modalCreate,
     modalEdit,
+    toast,
   } = useSelector((state: RootState) => state.modal);
   const { token, user } = useSelector((state: RootState) => state.auth);
   const { socket, conversations } = useSelector(
@@ -113,6 +116,10 @@ const MainContainer = () => {
     };
   }, [socket, conversations, dispatch]);
 
+  useEffect(() => {
+    dispatch(hideModalPost());
+  }, [location]);
+
   if (!token) {
     return <Navigate to="/login" replace={true} />;
   }
@@ -121,6 +128,7 @@ const MainContainer = () => {
 
   return (
     <>
+      {toast && <Toast message={toast} />}
       {modalCardOptions && <ModalCardOptions />}
       {modalOwnCardOptions && <ModalOwnCardOptions />}
       {modalPost && <ModalPost />}

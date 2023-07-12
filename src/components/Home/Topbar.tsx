@@ -22,11 +22,11 @@ const Topbar = () => {
   useOutsideAlerter(inputContainerRef, setIsFocused);
 
   return (
-    <div className="flex md:hidden fixed z-10 bg-lightBg dark:bg-darkBg top-0 w-full h-[60px] justify-between items-center border border-transparent border-b-black/20 dark:border-b-white/20 px-4">
+    <div className="flex md:hidden fixed z-10 bg-lightBg dark:bg-darkBg top-0 w-full h-[60px] justify-between items-center border border-transparent border-b-black/20 dark:border-b-white/20 px-4 gap-4">
       <span>INSTAGRAMR</span>
       <div
         ref={inputContainerRef}
-        className="relative rounded-lg bg-grayIg/5 dark:bg-grayIg flex px-4 py-2 gap-3 w-[30]"
+        className="relative rounded-lg bg-grayIg/5 dark:bg-grayIg flex px-4 py-2 gap-3 w-48"
       >
         <label htmlFor="searchMobileInput" className="text-gray-400 text-lg">
           <BiSearch />

@@ -9,12 +9,7 @@ import {
   AiFillCompass,
   AiFillHeart,
 } from "react-icons/ai";
-import {
-  IoPaperPlane,
-  IoPaperPlaneOutline,
-  IoPeopleCircle,
-  IoPeopleCircleOutline,
-} from "react-icons/io5";
+import { IoPaperPlane, IoPaperPlaneOutline } from "react-icons/io5";
 import { MdMovieFilter, MdOutlineMovieFilter } from "react-icons/md";
 import { FiPlusSquare } from "react-icons/fi";
 import { NavLink, useLocation } from "react-router-dom";
@@ -38,10 +33,6 @@ const Navbar = () => {
   const regexForMessagePage = new RegExp(/^\/direct(?:\/(.*))?$/);
   const alternateBar =
     searchBar || notifBar || regexForMessagePage.test(location.pathname);
-
-  console.log({
-    regexForMessagePage: regexForMessagePage.test(location.pathname),
-  });
 
   const handleCloseAlternateBar = () => {
     setSearchBar(false);

@@ -10,7 +10,9 @@ export { default as NotifNavbar } from "./Navbar/NotifNavbar";
 // Home
 export { default as StatusUser } from "./Home/StatusUser";
 export { default as Card } from "./Home/Card";
-export { default as TopBar } from "./Home/TopBar";
+export { default as TopBar } from "./Home/Topbar";
+export { default as Suggested } from "./Home/Suggested";
+export { default as HomeMain } from "./Home/HomeMain";
 
 // Reel
 export { default as ReelCard } from "./Reel/ReelCard";
@@ -43,3 +45,4 @@ export { default as ModalNewMessage } from "./Modals/ModalNewMessage";
 
 // UI
 export { default as Spinner } from "./UI/Spinner";
+export { default as Toast } from "./UI/Toast";

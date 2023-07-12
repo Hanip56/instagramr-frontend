@@ -1,12 +1,19 @@
-import { BiUserPlus } from "react-icons/bi";
 import { BsBookmark, BsGearWide, BsThreeDots } from "react-icons/bs";
 import { MdOutlineGridOn, MdOutlinePersonPin } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, Outlet, useLocation, useOutletContext } from "react-router-dom";
-import { selectCurrentUser } from "../app/features/auth/authSlice";
+import {
+  followUserState,
+  selectCurrentUser,
+  unfollowUserState,
+} from "../app/features/auth/authSlice";
 import { UserType } from "../../types";
 import { BASE_URL } from "../constants";
-import { useGetSingleUserQuery } from "../app/features/user/userApiSlice";
+import {
+  useFollowUserMutation,
+  useGetSingleUserQuery,
+  useUnfollowUserMutation,
+} from "../app/features/user/userApiSlice";
 import {
   Footer,
   ModalFollowers,
@@ -14,6 +21,7 @@ import {
   ModalGearProfile,
 } from "../components";
 import { useState } from "react";
+import { showModalCardOptions } from "../app/features/modal/modalSlice";
 
 const Profile = () => {
   const [showModalGearProfile, setShowModalGearProfile] = useState(false);
@@ -21,11 +29,38 @@ const Profile = () => {
   const [showModalFollowings, setShowModalFollowings] = useState(false);
   const location = useLocation();
   const user = useSelector(selectCurrentUser) as UserType;
+  const dispatch = useDispatch();
 
   const currentSlug = location.pathname.split("/")[1];
   const section = location.pathname.split("/")[2];
+  const [follow] = useFollowUserMutation();
+  const [unfollow] = useUnfollowUserMutation();
 
-  const { data: shownUser, isLoading } = useGetSingleUserQuery(currentSlug);
+  const {
+    data: shownUser,
+    isLoading,
+    isError,
+  } = useGetSingleUserQuery(currentSlug);
+
+  const handleFollow = async (targetId: string) => {
+    const res = await follow({
+      userId: user._id,
+      targetId,
+    });
+    if ("data" in res) {
+      dispatch(followUserState(targetId));
+    }
+  };
+
+  const handleUnfollow = async (targetId: string) => {
+    const res = await unfollow({
+      userId: user._id,
+      targetId,
+    });
+    if ("data" in res) {
+      dispatch(unfollowUserState(targetId));
+    }
+  };
 
   if (isLoading) {
     return (
@@ -33,20 +68,20 @@ const Profile = () => {
         <header className="max-w-[935px] py-2 px-2 md:px-6 flex flex-col gap-6 mb-6 md:mb-12">
           <div className="w-full flex gap-6 items-center gap-y-10">
             <div className="md:basis-[35%] flex justify-center items-center">
-              <div className="w-24 h-24 md:w-36 md:h-36 flex-shrink-0 bg-grayIg rounded-full flex justify-center items-center"></div>
+              <div className="w-24 h-24 md:w-36 md:h-36 flex-shrink-0 bg-grayIg/30 dark:bg-grayIg animate-pulse rounded-full flex justify-center items-center"></div>
             </div>
             <div className="md:block flex-1 space-y-4 md:space-y-7 md:pt-6">
               <div className="flex items-center gap-6">
-                <div className="w-16 h-6 bg-grayIg rounded-md"></div>
-                <div className="w-20 h-6 bg-grayIg rounded-md"></div>
+                <div className="w-16 h-6 bg-grayIg/30 dark:bg-grayIg animate-pulse rounded-md"></div>
+                <div className="w-20 h-6 bg-grayIg/30 dark:bg-grayIg animate-pulse rounded-md"></div>
               </div>
               <div className="flex items-center gap-6">
-                <div className="w-20 h-6 bg-grayIg rounded-md"></div>
-                <div className="w-20 h-6 bg-grayIg rounded-md"></div>
-                <div className="w-20 h-6 bg-grayIg rounded-md"></div>
+                <div className="w-20 h-6 bg-grayIg/30 dark:bg-grayIg animate-pulse rounded-md"></div>
+                <div className="w-20 h-6 bg-grayIg/30 dark:bg-grayIg animate-pulse rounded-md"></div>
+                <div className="w-20 h-6 bg-grayIg/30 dark:bg-grayIg animate-pulse rounded-md"></div>
               </div>
               <div className="flex items-center gap-6">
-                <div className="w-24 h-6 bg-grayIg rounded-md"></div>
+                <div className="w-24 h-6 bg-grayIg/30 dark:bg-grayIg animate-pulse rounded-md"></div>
               </div>
             </div>
           </div>
@@ -55,6 +90,7 @@ const Profile = () => {
     );
   }
 
+  const isFollowed = user.followings.includes(shownUser?._id ?? "");
   const isOwnUser = user.slug === currentSlug;
 
   const profileButtonsContainer = () => {
@@ -67,15 +103,27 @@ const Profile = () => {
     } else {
       return (
         <div className="flex items-center gap-2">
-          <button className="igButton">
-            <span>Following</span>
-          </button>
-          <button className="igButton">
+          {isFollowed ? (
+            <button
+              onClick={() => handleUnfollow(shownUser?._id ?? "")}
+              className="igButton"
+            >
+              <span>followings</span>
+            </button>
+          ) : (
+            <button
+              onClick={() => handleFollow(shownUser?._id ?? "")}
+              className="igButtonBlue"
+            >
+              <span>Follow</span>
+            </button>
+          )}
+          <Link to={"/direct"} className="igButton">
             <span>Message</span>
-          </button>
-          <button className="igButton text-xl">
+          </Link>
+          {/* <button className="igButton text-xl">
             <BiUserPlus />
-          </button>
+          </button> */}
         </div>
       );
     }
@@ -122,7 +170,16 @@ const Profile = () => {
                   {profileButtonsContainer()}
                 </div>
                 {!isOwnUser && (
-                  <button className="text-2xl">
+                  <button
+                    onClick={() =>
+                      dispatch(
+                        showModalCardOptions({
+                          postedBy: { _id: shownUser?._id },
+                        })
+                      )
+                    }
+                    className="text-2xl"
+                  >
                     <BsThreeDots />
                   </button>
                 )}

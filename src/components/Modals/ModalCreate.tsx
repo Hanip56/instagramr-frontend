@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { hideModalCreate } from "../../app/features/modal/modalSlice";
 import { useCreatePostMutation } from "../../app/features/post/postApiSlice";
 import { Spinner } from "..";
+import { IoCheckmarkCircleOutline } from "react-icons/io5";
 
 const ModalCreate = () => {
   const [caption, setCaption] = useState("");
@@ -15,14 +16,6 @@ const ModalCreate = () => {
 
   const [createPost, { isLoading, isSuccess, error }] = useCreatePostMutation();
 
-  console.log({ error });
-
-  useEffect(() => {
-    if (isSuccess) {
-      dispatch(hideModalCreate());
-    }
-  }, [isSuccess, dispatch]);
-
   const handleClose = () => {
     dispatch(hideModalCreate());
 
@@ -31,12 +24,6 @@ const ModalCreate = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    console.log({
-      contentType: postFile?.type,
-      content: postFile,
-      caption,
-    });
 
     const formdata = new FormData();
 
@@ -96,8 +83,20 @@ const ModalCreate = () => {
       ></div>
 
       <div className="fixed left-[50%] top-[50%] -translate-y-[50%] -translate-x-[50%] z-50 flex justify-center items-center rounded-md text-lightText dark:text-darkText">
-        {isLoading && <Spinner />}
-        {!isLoading && (
+        {(isLoading || isSuccess) && (
+          <div className="bg-lightBg dark:bg-grayIg rounded-md overflow-hidden animate-fadeIn w-[80vw] sm:w-96 h-80 flex justify-center items-center">
+            {isLoading && <Spinner />}
+            {isSuccess && (
+              <div className="flex flex-col items-center gap-y-4">
+                <span className="text-5xl">
+                  <IoCheckmarkCircleOutline />
+                </span>
+                <p>Your post has been posted.</p>
+              </div>
+            )}
+          </div>
+        )}
+        {!isLoading && !isSuccess && (
           <form
             onSubmit={handleSubmit}
             className="w-[80vw] lg:w-[50rem] bg-lightBg dark:bg-grayIg rounded-md overflow-hidden animate-fadeIn"

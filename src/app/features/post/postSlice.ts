@@ -14,6 +14,9 @@ const postSlice = createSlice({
     nextPageFollowingPost: (state) => {
       state.followingPostPage++;
     },
+    resetPageFollowingPost: (state) => {
+      state.followingPostPage = 1;
+    },
     nextPageExplorePost: (state) => {
       state.explorePostPage++;
     },
@@ -29,6 +32,7 @@ const postSlice = createSlice({
 export const {
   nextPageExplorePost,
   nextPageFollowingPost,
+  resetPageFollowingPost,
   nextPageSavedPost,
   handleMute,
 } = postSlice.actions;

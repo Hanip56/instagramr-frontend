@@ -245,9 +245,9 @@ const Card = ({ post }: PropTypes) => {
             <button className="hover:opacity-75" onClick={handleShowModal}>
               <IoChatbubbleOutline />
             </button>
-            <button className="hover:opacity-75">
+            <Link to={"/direct"} className="hover:opacity-75">
               <IoPaperPlaneOutline />
-            </button>
+            </Link>
           </div>
           <div>
             <button

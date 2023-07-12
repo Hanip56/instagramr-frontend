@@ -7,6 +7,7 @@ type InitialStateType = {
   modalPost: boolean;
   modalCreate: boolean;
   modalEdit: boolean;
+  toast: string;
 };
 
 const initialState: InitialStateType = {
@@ -16,6 +17,7 @@ const initialState: InitialStateType = {
   modalPost: false,
   modalCreate: false,
   modalEdit: false,
+  toast: "",
 };
 
 const modalSlice = createSlice({
@@ -59,6 +61,12 @@ const modalSlice = createSlice({
     hideModalEdit: (state) => {
       state.modalEdit = false;
     },
+    setToast: (state, action) => {
+      state.toast = action.payload;
+    },
+    hideToast: (state) => {
+      state.toast = "";
+    },
   },
 });
 
@@ -73,6 +81,8 @@ export const {
   showModalCreate,
   hideModalEdit,
   showModalEdit,
+  setToast,
+  hideToast,
 } = modalSlice.actions;
 
 export default modalSlice.reducer;

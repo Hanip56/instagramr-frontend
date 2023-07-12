@@ -29,6 +29,9 @@ const userApiSlice = apiSlice.injectEndpoints({
           ? [{ type: "SingleUser", id: result._id }]
           : [{ type: "SingleUser", id: "SINGLE" }],
     }),
+    getSuggestedUser: builder.query<UserType[], void>({
+      query: () => `/api/user/suggested`,
+    }),
     getFollowers: builder.query<UserShortType[], string>({
       query: (slug) => `/api/user/${slug}/followers`,
     }),
@@ -87,6 +90,7 @@ const userApiSlice = apiSlice.injectEndpoints({
 export const {
   useFindUserQuery,
   useGetSingleUserQuery,
+  useGetSuggestedUserQuery,
   useGetFollowersQuery,
   useGetFollowingsQuery,
   useFollowUserMutation,
