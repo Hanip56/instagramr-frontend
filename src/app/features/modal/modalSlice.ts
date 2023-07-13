@@ -19,7 +19,6 @@ const initialState: InitialStateType = {
   modalEdit: false,
   toast: "",
 };
-
 const modalSlice = createSlice({
   name: "modal",
   initialState,

@@ -46,3 +46,4 @@ export { default as ModalNewMessage } from "./Modals/ModalNewMessage";
 // UI
 export { default as Spinner } from "./UI/Spinner";
 export { default as Toast } from "./UI/Toast";
+export { default as LoadingPages } from "./UI/LoadingPages";

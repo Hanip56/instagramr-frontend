@@ -32,7 +32,10 @@ import {
 } from "../../app/features/user/userApiSlice";
 import { ReelCommentCard } from "..";
 import useOutsideAlerterDoubleRef from "../../hooks/useOutsideAlerterDoubleRef";
-import { showModalCardOptions } from "../../app/features/modal/modalSlice";
+import {
+  showModalCardOptions,
+  showModalOwnCardOptions,
+} from "../../app/features/modal/modalSlice";
 import { RootState } from "../../app/store";
 
 type PropTypes = {
@@ -68,8 +71,6 @@ const ReelCard = forwardRef<HTMLVideoElement[], PropTypes>(
     const liked = reel?.likes.some((u) => u._id === user._id);
     const saved = reel?.savedBy.some((u) => u === user._id);
     const totalLikes = reel?.likes.length;
-
-    console.log({ saved: reel.savedBy });
 
     const [likeAndUnlike] = useLikeAndUnlikeMutation();
     const [follow] = useFollowUserMutation();
@@ -133,7 +134,11 @@ const ReelCard = forwardRef<HTMLVideoElement[], PropTypes>(
     };
 
     const handleShowModalCardOptions = () => {
-      dispatch(showModalCardOptions(reel));
+      if (isOwnUser) {
+        dispatch(showModalOwnCardOptions({ post: reel, postId: reel._id }));
+      } else {
+        dispatch(showModalCardOptions(reel));
+      }
     };
 
     const buttonCommentRef = useRef<HTMLDivElement>(null);

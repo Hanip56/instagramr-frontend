@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import { BASE_URL } from "./constants";
 import { setCredentials } from "./app/features/auth/authSlice";
 import { useDispatch } from "react-redux";
+import { LoadingPages } from "./components";
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -29,7 +30,7 @@ const App = () => {
     fetchRefresh();
   }, []);
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <LoadingPages />;
 
   if (errorMessage) return <p>{errorMessage}</p>;
 

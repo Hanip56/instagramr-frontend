@@ -1,12 +1,8 @@
 import { useEffect, useMemo } from "react";
-import { useRef } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { hideModalEdit } from "../../app/features/modal/modalSlice";
-import {
-  useCreatePostMutation,
-  useUpdatePostMutation,
-} from "../../app/features/post/postApiSlice";
+import { useUpdatePostMutation } from "../../app/features/post/postApiSlice";
 import { Spinner } from "..";
 import { RootState } from "../../app/store";
 import { PostType } from "../../../types";
@@ -49,7 +45,7 @@ const ModalEdit = () => {
     if (postFileType === "image") {
       return (
         <img
-          src={`${BASE_URL}/thumbnail/${post.thumbnail}`}
+          src={`${BASE_URL}/${post.content[0]}`}
           alt=""
           className="w-full h-full object-contain object-center"
         ></img>
@@ -57,7 +53,7 @@ const ModalEdit = () => {
     } else if (postFileType === "video") {
       return (
         <video
-          src={`${BASE_URL}/thumbnail/${post.thumbnail}`}
+          src={`${BASE_URL}/${post.content[0]}`}
           autoPlay
           muted
           loop

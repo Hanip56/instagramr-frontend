@@ -75,7 +75,7 @@ const Navbar = () => {
             <AiOutlineInstagram />
           </div>
           <p className={`hidden ml-3 ${alternateBar ? "" : "lg:block"}`}>
-            Instagram
+            InstagramR
           </p>
         </div>
         <div className="flex-grow flex flex-row items-center md:flex-col gap-y-2">
