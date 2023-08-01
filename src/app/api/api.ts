@@ -5,9 +5,10 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store";
 import { logout, setCredentials } from "../features/auth/authSlice";
+import { BASE_URL } from "../../constants";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:5000",
+  baseUrl: BASE_URL,
   prepareHeaders: (Headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
     if (token) {
