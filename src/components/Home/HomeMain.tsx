@@ -15,7 +15,7 @@ import { BASE_URL } from "../../constants";
 const HomeMain = () => {
   const { followingPostPage } = useSelector((state: RootState) => state.post);
   const user = useSelector(selectCurrentUser) as UserType;
-  const { data, isError, isLoading, isFetching } =
+  const { data, isLoading, isFetching } =
     useGetFollowingPostQuery(followingPostPage);
   const dispatch = useDispatch();
   const navigate = useNavigate();

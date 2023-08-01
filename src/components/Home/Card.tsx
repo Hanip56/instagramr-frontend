@@ -62,7 +62,6 @@ const Card = ({ post }: PropTypes) => {
   const latestComment = isCommented.slice(-2);
 
   const handleLoves = async () => {
-    console.log("handleLoves");
     await likeAndUnlike({
       postId: post?._id ?? "",
       user: {

@@ -12,12 +12,7 @@ const SearchNavbar = forwardRef<HTMLDivElement, PropTypes>(
   ({ handleCloseSearchBar }, ref) => {
     const [search, setSearch] = useState("");
 
-    const {
-      data: searchedUsers,
-      isLoading,
-      isFetching,
-      error,
-    } = useFindUserQuery(search);
+    const { data: searchedUsers } = useFindUserQuery(search);
 
     return (
       <div

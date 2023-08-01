@@ -1,4 +1,3 @@
-import React from "react";
 import { PostMiniCard } from "..";
 import EmptySection from "./EmptySection";
 import { BsCamera } from "react-icons/bs";
@@ -22,8 +21,6 @@ const PostsSection = () => {
       return <EmptySection logo={<BsCamera />} title="No Posts yet" desc="" />;
     }
   }
-
-  console.log({ posts });
 
   return (
     <main className="w-full grid grid-cols-3 gap-1 py-6 px-0 md:px-2">

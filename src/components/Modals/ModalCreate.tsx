@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useRef } from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -14,7 +14,7 @@ const ModalCreate = () => {
   const dispatch = useDispatch();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [createPost, { isLoading, isSuccess, error }] = useCreatePostMutation();
+  const [createPost, { isLoading, isSuccess }] = useCreatePostMutation();
 
   const handleClose = () => {
     dispatch(hideModalCreate());

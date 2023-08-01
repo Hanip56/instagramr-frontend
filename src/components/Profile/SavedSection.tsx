@@ -1,20 +1,11 @@
 import { BsBookmark, BsPlus } from "react-icons/bs";
-import postImage from "../../dummyData/postImage.jpg";
 import EmptySection from "./EmptySection";
-import { useShownUser } from "../../pages/Profile";
-import {
-  useGetSavedPostQuery,
-  useGetThumbnailSavedQuery,
-} from "../../app/features/post/postApiSlice";
+import { useGetThumbnailSavedQuery } from "../../app/features/post/postApiSlice";
 import { BASE_URL } from "../../constants";
 import { Link } from "react-router-dom";
 
 const SavedSection = () => {
-  const { user } = useShownUser();
-  // const savedPostPage = useSelector(
-  //   (state: RootState) => state.post.savedPostPage
-  // );
-  const { data, isLoading } = useGetThumbnailSavedQuery();
+  const { data } = useGetThumbnailSavedQuery();
 
   const saved = data?.posts;
 

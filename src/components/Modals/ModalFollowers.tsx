@@ -59,8 +59,6 @@ const ModalFollowers = ({ hide, slug }: PropTypes) => {
     }
   };
 
-  console.log(followers);
-
   return (
     <>
       <div

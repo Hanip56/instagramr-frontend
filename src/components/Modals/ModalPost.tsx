@@ -1,4 +1,4 @@
-import { useRef, useState, FormEvent, useEffect } from "react";
+import { useRef, useState, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   hideModalPost,
@@ -79,7 +79,6 @@ const ModalPost = () => {
   };
 
   const handleLoves = async () => {
-    console.log("handleLoves");
     await likeAndUnlike({
       postId: currentPost?._id ?? "",
       user: {
@@ -138,7 +137,6 @@ const ModalPost = () => {
   const vidRef = useRef<HTMLVideoElement>(null);
 
   const handlePlay = () => {
-    console.log("clicked");
     setIsVideoPlay((prev) => {
       if (prev) {
         vidRef.current?.pause();

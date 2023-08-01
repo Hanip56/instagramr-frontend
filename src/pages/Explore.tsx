@@ -10,9 +10,7 @@ const Explore = () => {
   const {
     data: explorePost,
     isLoading,
-    isError,
     isFetching,
-    isSuccess,
   } = useGetExplorePostQuery(explorePostPage);
   const dispatch = useDispatch();
 
@@ -42,8 +40,6 @@ const Explore = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [explorePostPage, explorePost?.maxPages]);
-
-  console.log({ isLoading, isFetching });
 
   return (
     <div>

@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { forwardRef } from "react";
-import { AiFillHeart } from "react-icons/ai";
 import { BsHeart } from "react-icons/bs";
 
 const NotifNavbar = forwardRef<HTMLDivElement>((_, ref) => {
@@ -30,7 +29,7 @@ const NotifNavbar = forwardRef<HTMLDivElement>((_, ref) => {
           {notifications.length > 0 &&
             Array(4)
               .fill("")
-              .map((key, idx) => (
+              .map((_key, idx) => (
                 <Link to={`/halfz`} key={idx}>
                   <div className="w-fit flex-shrink-0 flex gap-4 items-center gap-y-1">
                     <div className="w-16 h-16 border-2 flex-shrink-0 border-white rounded-full flex justify-center items-center">

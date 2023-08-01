@@ -39,7 +39,6 @@ const SignUp = () => {
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const registerResult = await registerAuth(data);
-    console.log({ registerResult });
     if ("data" in registerResult) {
       dispatch(setCredentials({ ...registerResult.data }));
       navigate("/");

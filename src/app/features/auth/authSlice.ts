@@ -1,7 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { UserType } from "../../../../types/index";
 import { RootState } from "../../store";
-import { useFollowUserMutation } from "../user/userApiSlice";
 
 type initialStateType = {
   user: UserType | undefined;

@@ -23,12 +23,7 @@ const ModalNewMessage = ({ handleHideModal }: PropTypes) => {
 
   const [createConversation] = useCreateConversationMutation();
 
-  const {
-    data: searchedUsers,
-    isLoading,
-    isFetching,
-    error,
-  } = useFindUserQuery(search);
+  const { data: searchedUsers, isLoading } = useFindUserQuery(search);
 
   const handleAddSelectedUser = (userInfo: UserShortType) => {
     if (userInfo._id === user._id) {

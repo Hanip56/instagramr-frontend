@@ -11,8 +11,6 @@ function useOutsideAlerter(
 
     function handleClickOutside(event: MouseEvent) {
       if (ref.current && !ref.current.contains(event.target as Node)) {
-        // console.log(ref);
-        // console.log("You clicked outside of me!");
         set(false);
       }
     }

@@ -8,8 +8,6 @@ const initialState = {
       : "light"),
 };
 
-console.log({ initialState });
-
 if (initialState.mode === "dark") {
   document.documentElement.classList.add("dark");
 }

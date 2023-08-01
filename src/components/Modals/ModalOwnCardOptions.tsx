@@ -5,17 +5,12 @@ import {
   setToast,
   showModalEdit,
 } from "../../app/features/modal/modalSlice";
-import {
-  deletePostState,
-  selectCurrentUser,
-} from "../../app/features/auth/authSlice";
-import { UserType } from "../../../types";
+import { deletePostState } from "../../app/features/auth/authSlice";
 import { RootState } from "../../app/store";
 import { useDeletePostMutation } from "../../app/features/post/postApiSlice";
 
 const ModalOwnCardOptions = () => {
   const dispatch = useDispatch();
-  const user = useSelector(selectCurrentUser) as UserType;
   const postId = useSelector(
     (state: RootState) => state.modal.modalPayload.postId
   ) as string;

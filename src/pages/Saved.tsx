@@ -5,16 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../app/store";
 import { nextPageSavedPost } from "../app/features/post/postSlice";
 import { BsChevronLeft } from "react-icons/bs";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Saved = () => {
   const { savedPostPage } = useSelector((state: RootState) => state.post);
   const {
     data: savedPosts,
     isLoading,
-    isError,
     isFetching,
-    isSuccess,
   } = useGetSavedPostQuery({ pageNumber: savedPostPage });
   const dispatch = useDispatch();
   const navigate = useNavigate();

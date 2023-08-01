@@ -37,7 +37,6 @@ const SignIn = () => {
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const loginResult = await login(data);
-    console.log({ loginResult });
     if ("data" in loginResult && loginResult.data) {
       dispatch(setCredentials({ ...loginResult.data }));
       navigate("/");

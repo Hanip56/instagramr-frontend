@@ -1,10 +1,9 @@
-import { PostMiniCard } from "..";
 import EmptySection from "./EmptySection";
 import { MdOutlinePersonPin } from "react-icons/md";
 import { useShownUser } from "../../pages/Profile";
 
 const TaggedSection = () => {
-  const { user, isOwnUser } = useShownUser();
+  const { isOwnUser } = useShownUser();
 
   const tagged = []; // In development
 

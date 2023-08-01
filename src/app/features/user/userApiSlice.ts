@@ -24,7 +24,7 @@ const userApiSlice = apiSlice.injectEndpoints({
     }),
     getSingleUser: builder.query<UserType, string>({
       query: (slug) => `/api/user/${slug}`,
-      providesTags: (result, err, arg) =>
+      providesTags: (result) =>
         result
           ? [{ type: "SingleUser", id: result._id }]
           : [{ type: "SingleUser", id: "SINGLE" }],
@@ -43,7 +43,7 @@ const userApiSlice = apiSlice.injectEndpoints({
         url: `/api/user/${targetId}/follow`,
         method: "PATCH",
       }),
-      invalidatesTags: (result, err, arg) => [
+      invalidatesTags: (_result, _err, arg) => [
         { type: "SingleUser", id: store.getState().auth.user?._id },
         { type: "SingleUser", id: arg.targetId },
       ],
@@ -53,7 +53,7 @@ const userApiSlice = apiSlice.injectEndpoints({
         url: `/api/user/${targetId}/unfollow`,
         method: "PATCH",
       }),
-      invalidatesTags: (result, err, arg) => [
+      invalidatesTags: (_result, _err, arg) => [
         { type: "SingleUser", id: store.getState().auth.user?._id },
         { type: "SingleUser", id: arg.targetId },
       ],

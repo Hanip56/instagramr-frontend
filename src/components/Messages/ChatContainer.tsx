@@ -1,14 +1,4 @@
-import {
-  BsCameraVideo,
-  BsHeart,
-  BsImage,
-  BsInfoCircle,
-  BsInfoCircleFill,
-  BsMic,
-  BsPeopleFill,
-  BsPerson,
-  BsTelephone,
-} from "react-icons/bs";
+import { BsInfoCircle, BsInfoCircleFill, BsPeopleFill } from "react-icons/bs";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { VscSmiley } from "react-icons/vsc";
 import { BASE_URL } from "../../constants";
@@ -26,7 +16,6 @@ import useOutsideAlerter from "../../hooks/useOutsideAlerter";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import {
-  useCreateConversationMutation,
   useDeleteConversationMutation,
   useSendMessageMutation,
 } from "../../app/features/socket/socketApiSlice";
@@ -49,8 +38,6 @@ const ChatContainer = () => {
 
   const [sendMessage, { isLoading: sendMessageLoading }] =
     useSendMessageMutation();
-  const [createConversation, { isLoading: createConversationLoading }] =
-    useCreateConversationMutation();
   const [deleteConversation, { isSuccess: deleteSuccess }] =
     useDeleteConversationMutation();
 
@@ -250,7 +237,7 @@ const ChatContainer = () => {
             {text && (
               <button
                 type="submit"
-                disabled={createConversationLoading || sendMessageLoading}
+                disabled={sendMessageLoading}
                 className="text-sm text-blue-400 hover:text-lightText dark:hover:text-darkText font-semibold"
               >
                 Send

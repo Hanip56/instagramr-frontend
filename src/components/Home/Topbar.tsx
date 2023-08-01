@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { BiSearch } from "react-icons/bi";
 import { useFindUserQuery } from "../../app/features/user/userApiSlice";
@@ -10,12 +10,7 @@ const Topbar = () => {
   const [search, setSearch] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 
-  const {
-    data: searchedUsers,
-    isLoading,
-    isFetching,
-    error,
-  } = useFindUserQuery(search);
+  const { data: searchedUsers, isLoading } = useFindUserQuery(search);
 
   const inputContainerRef = useRef<HTMLDivElement>(null);
 

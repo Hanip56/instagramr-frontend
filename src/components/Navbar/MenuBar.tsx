@@ -1,17 +1,20 @@
 import { HiBars3 } from "react-icons/hi2";
-import { TbMessageReport, TbMoon, TbSettings } from "react-icons/tb";
+import { TbMoon, TbSettings } from "react-icons/tb";
 import { useState, createRef, useEffect } from "react";
 import useOutsideAlerterDoubleRef from "../../hooks/useOutsideAlerterDoubleRef";
 import { FiChevronLeft } from "react-icons/fi";
 import { BiTagAlt } from "react-icons/bi";
-import { AiOutlineFieldTime } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../app/store";
 import { toggleMode } from "../../app/features/mode/modeSlice";
 import { useLogoutMutation } from "../../app/features/auth/authApiSlice";
 import apiSlice from "../../app/api/api";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { logout as logoutState } from "../../app/features/auth/authSlice";
+import {
+  logout as logoutState,
+  selectCurrentUser,
+} from "../../app/features/auth/authSlice";
+import { UserType } from "../../../types";
 
 type PropTypes = {
   alternateBar: boolean;
@@ -23,6 +26,7 @@ const MenuBar = ({ alternateBar }: PropTypes) => {
   const barRef = createRef<HTMLDivElement>();
   const moreBtnRef = createRef<HTMLButtonElement>();
   const { mode } = useSelector((state: RootState) => state.mode);
+  const user = useSelector(selectCurrentUser) as UserType;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -144,7 +148,7 @@ const MenuBar = ({ alternateBar }: PropTypes) => {
                 </span>
                 <span>Your activity</span>
               </a> */}
-              <Link to={"/sky/saved"} className="menuList">
+              <Link to={`/${user.slug}/saved`} className="menuList">
                 <span className="text-2xl p-3">
                   <BiTagAlt />
                 </span>

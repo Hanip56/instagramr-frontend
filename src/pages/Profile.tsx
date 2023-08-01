@@ -36,11 +36,7 @@ const Profile = () => {
   const [follow] = useFollowUserMutation();
   const [unfollow] = useUnfollowUserMutation();
 
-  const {
-    data: shownUser,
-    isLoading,
-    isError,
-  } = useGetSingleUserQuery(currentSlug);
+  const { data: shownUser, isLoading } = useGetSingleUserQuery(currentSlug);
 
   const handleFollow = async (targetId: string) => {
     const res = await follow({

@@ -1,4 +1,4 @@
-import { createRef, useEffect, useState } from "react";
+import { createRef, useEffect } from "react";
 import {
   useEditProfilePictureMutation,
   useRemoveProfilePictureMutation,

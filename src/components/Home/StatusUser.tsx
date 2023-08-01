@@ -56,7 +56,7 @@ const StatusUser = () => {
       >
         {Array(18)
           .fill("")
-          .map((key, idx) => (
+          .map((_key, idx) => (
             <div
               key={idx}
               className="w-fit flex-shrink-0 flex flex-col items-center gap-y-1"

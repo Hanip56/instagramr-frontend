@@ -1,5 +1,4 @@
 import { useDispatch } from "react-redux";
-import { hideModalCardOptions } from "../../app/features/modal/modalSlice";
 import { useLogoutMutation } from "../../app/features/auth/authApiSlice";
 import { logout as logoutState } from "../../app/features/auth/authSlice";
 import apiSlice from "../../app/api/api";

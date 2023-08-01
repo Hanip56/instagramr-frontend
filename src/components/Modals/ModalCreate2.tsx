@@ -1,5 +1,4 @@
 import { AiOutlineArrowLeft } from "react-icons/ai";
-import postImage from "../../dummyData/postImage.jpg";
 import { IoImagesOutline } from "react-icons/io5";
 import { createRef, useState } from "react";
 import React, { useRef } from "react";
@@ -10,7 +9,6 @@ import { hideModalCreate } from "../../app/features/modal/modalSlice";
 
 const ModalCreate = () => {
   const inputRef = createRef<HTMLInputElement>();
-  const [phase, setPhase] = useState("first");
   const [imageUrl, setImageUrl] = useState("");
   const dispatch = useDispatch();
 

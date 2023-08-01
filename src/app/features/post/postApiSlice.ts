@@ -75,7 +75,7 @@ const postApiSlice = apiSlice.injectEndpoints({
     getExplorePost: builder.query<ExplorePostsState, number>({
       query: (pageNumber) => `/api/post?page=${pageNumber}`,
       keepUnusedDataFor: Infinity,
-      providesTags: (result, error, arg) =>
+      providesTags: (result) =>
         result
           ? [
               { type: "ExplorePost", id: "LIST" },
@@ -102,7 +102,7 @@ const postApiSlice = apiSlice.injectEndpoints({
     getReelPost: builder.query<ExplorePostsState, number>({
       query: (pageNumber) => `/api/post?page=${pageNumber}&type=video`,
       keepUnusedDataFor: Infinity,
-      providesTags: (result, error, arg) =>
+      providesTags: (result) =>
         result
           ? [
               { type: "ReelPost", id: "LIST" },
@@ -132,7 +132,7 @@ const postApiSlice = apiSlice.injectEndpoints({
     getSavedPost: builder.query<ExplorePostsState, GetSavedPostArg>({
       query: ({ pageNumber, limit }) =>
         `/api/post/saved?page=${pageNumber}&limit=${limit}`,
-      providesTags: (result, error, arg) =>
+      providesTags: (result) =>
         result
           ? [
               { type: "SavedPost", id: "LIST" },
@@ -158,12 +158,12 @@ const postApiSlice = apiSlice.injectEndpoints({
     }),
     getSinglePost: builder.query<PostType, string>({
       query: (postId) => `/api/post/${postId}`,
-      providesTags: (result, err, arg) => [{ type: "SinglePost", id: arg }],
+      providesTags: (_result, _err, arg) => [{ type: "SinglePost", id: arg }],
     }),
     getFollowingPost: builder.query<FollowingPostResponse, number>({
       query: (pageNumber) => `/api/post/postFollowing?page=${pageNumber}`,
       keepUnusedDataFor: Infinity,
-      providesTags: (result, error, arg) =>
+      providesTags: (result) =>
         result
           ? [
               { type: "FollowingPost", id: "LIST" },
@@ -338,17 +338,17 @@ const postApiSlice = apiSlice.injectEndpoints({
         method: "PATCH",
         body: { comment },
       }),
-      invalidatesTags: (result, err, arg) => [
+      invalidatesTags: (result) => [
         { type: "SinglePost", id: result?.data.postId },
       ],
     }),
-    updatePost: builder.mutation<any, UpdatePostArg>({
+    updatePost: builder.mutation<PostType, UpdatePostArg>({
       query: ({ postId, body }) => ({
         url: `/api/post/${postId}`,
         method: "PUT",
         body,
       }),
-      invalidatesTags: (result, err, arg) => {
+      invalidatesTags: (_result, _err, arg) => {
         return [{ type: "SinglePost", id: arg.postId }];
       },
     }),
@@ -362,7 +362,7 @@ const postApiSlice = apiSlice.injectEndpoints({
 
         return [{ type: "SingleUser", id: userId }];
       },
-      async onQueryStarted(postId, { dispatch, queryFulfilled }) {
+      async onQueryStarted(_postId, { dispatch, queryFulfilled }) {
         try {
           const data = await queryFulfilled;
           dispatch(

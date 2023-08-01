@@ -60,8 +60,6 @@ const Suggested = () => {
     };
   }, []);
 
-  console.log({ isLoading, suggestedUsers });
-
   if (isLoading) return <Spinner />;
 
   return (

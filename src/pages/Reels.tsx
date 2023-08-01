@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useGetReelPostQuery } from "../app/features/post/postApiSlice";
 import { ReelCard } from "../components";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../app/store";
+import { useDispatch } from "react-redux";
 import { handleMute } from "../app/features/post/postSlice";
 
 const getCardSize = () => {
@@ -29,14 +28,13 @@ const getCardSize = () => {
 
 const Reels = () => {
   const [reelsLength, setReelsLength] = useState(0);
-  const { muted } = useSelector((state: RootState) => state.post);
   const [cardSize, setCardSize] = useState(() => {
     const { width, height, margin } = getCardSize();
     return { w: width, h: height, m: margin };
   });
   const dispatch = useDispatch();
 
-  const { data, isLoading } = useGetReelPostQuery(1);
+  const { data } = useGetReelPostQuery(1);
 
   const reels = data?.posts;
 

@@ -1,4 +1,3 @@
-import { UserShortType } from "../../../../types";
 import apiSlice from "../../api/api";
 import { ConversationsType } from "./socketSlice";
 

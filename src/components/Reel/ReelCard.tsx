@@ -2,12 +2,7 @@ import { forwardRef, useState, useRef } from "react";
 import { PostType, UserShortType, UserType } from "../../../types";
 import { BASE_URL } from "../../constants";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
-import {
-  BsBookmark,
-  BsChat,
-  BsFillPlayFill,
-  BsThreeDots,
-} from "react-icons/bs";
+import { BsChat, BsFillPlayFill, BsThreeDots } from "react-icons/bs";
 import {
   IoBookmark,
   IoBookmarkOutline,
